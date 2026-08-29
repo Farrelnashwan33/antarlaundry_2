@@ -116,11 +116,11 @@
             <div>
               <h4 class="text-white font-semibold mb-6 text-lg">Layanan</h4>
               <ul class="space-y-4 text-base text-primary-100/80">
-                <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Cuci Komplit</a></li>
-                <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Cuci Kering</a></li>
-                <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Setrika Saja</a></li>
-                <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Cuci Sepatu</a></li>
-                <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Langganan</a></li>
+                <li><a href="#services" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Cuci Komplit</a></li>
+                <li><a href="#services" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Cuci Kering</a></li>
+                <li><a href="#services" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Setrika Saja</a></li>
+                <li><a href="#services" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Cuci Sepatu</a></li>
+                <li><a href="#services" class="hover:text-white transition-colors flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span> Langganan</a></li>
               </ul>
             </div>
             

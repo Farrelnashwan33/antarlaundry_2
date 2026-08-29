@@ -15,7 +15,7 @@
   ]);
   
   let inputText = $state('');
-  let chatContainer: HTMLElement;
+  let chatContainer = $state<HTMLElement>();
   let isBotTyping = $state(false);
 
   async function scrollToBottom() {
@@ -106,7 +106,7 @@
           <p class="text-xs text-primary-100">Selalu Aktif (AI)</p>
         </div>
       </div>
-      <button onclick={closeChat} class="text-primary-100 hover:text-white hover:bg-white/10 p-2 rounded-full transition">
+      <button aria-label="Tutup Chat" onclick={closeChat} class="text-primary-100 hover:text-white hover:bg-white/10 p-2 rounded-full transition">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
@@ -147,6 +147,7 @@
           rows="1"
         ></textarea>
         <button 
+          aria-label="Kirim Pesan"
           onclick={sendMessage}
           disabled={!inputText.trim() || isBotTyping}
           class="w-9 h-9 flex-shrink-0 bg-primary text-white rounded-lg flex items-center justify-center disabled:opacity-50 disabled:bg-surface-400 hover:bg-primary-hover transition mb-0.5"

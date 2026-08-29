@@ -13,8 +13,8 @@
       </p>
       
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#" class="bg-surface-900 text-white hover:bg-surface-800 px-6 py-3 rounded-xl font-medium transition">Grup Telegram</a>
-        <a href="#" class="bg-[#1877F2] text-white hover:bg-blue-700 px-6 py-3 rounded-xl font-medium transition">Grup Facebook</a>
+        <button type="button" class="bg-surface-900 text-white hover:bg-surface-800 px-6 py-3 rounded-xl font-medium transition">Grup Telegram</button>
+        <button type="button" class="bg-[#1877F2] text-white hover:bg-blue-700 px-6 py-3 rounded-xl font-medium transition">Grup Facebook</button>
       </div>
     </div>
   </div>

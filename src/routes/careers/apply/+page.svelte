@@ -4,7 +4,7 @@
   
   let { form } = $props();
   let loading = $state(false);
-  let success = $state(form?.success || false);
+  let success = $derived(form?.success || false);
   
   // Default position based on query param if available
   let selectedPosition = $state($page.url.searchParams.get('role') === 'cs' ? 'CS' : 'RIDER');
@@ -65,7 +65,7 @@
               </div>
               
               <div class="space-y-2">
-                <label class="text-sm font-medium text-surface-700 block mb-2">Jenis Kelamin</label>
+                <span class="text-sm font-medium text-surface-700 block mb-2">Jenis Kelamin</span>
                 <div class="flex items-center gap-6 mt-3">
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input type="radio" name="gender" value="Laki-laki" class="text-primary focus:ring-primary w-4 h-4">
