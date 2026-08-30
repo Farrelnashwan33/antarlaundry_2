@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,269 +7,195 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  CUSTOMER
-  ADMIN
-  COURIER
-  STAFF
-}
-
-enum OrderStatus {
-  PENDING
-  PICKUP
-  PROCESSING
-  WASHING
-  DRYING
-  IRONING
-  READY
-  DELIVERY
-  COMPLETED
-  CANCELLED
-}
-
-enum PaymentStatus {
-  UNPAID
-  PENDING
-  PAID
-  FAILED
-  REFUNDED
-}
-
-enum DeliveryStatus {
-  ASSIGNED
-  PICKUP
-  ON_PROCESS
-  OUT_FOR_DELIVERY
-  DELIVERED
-  FAILED
-}
-
 model User {
-  id            String    @id @default(uuid())
-  name          String
-  email         String    @unique
-  passwordHash  String
-  phone         String?
-  role          Role      @default(CUSTOMER)
-  
-  // Relations
-  customerProfile CustomerProfile?
-  courierProfile  CourierProfile?
-  
-  orders        Order[]   @relation("CustomerOrders")
-  deliveries    Delivery[] @relation("CourierDeliveries")
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-}
+  id            String     @id @default(uuid())
+  name          String?
+  username      String?    @unique
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  phone         String?    @unique
+  passwordHash  String?
+  role          User_role  @default(CUSTOMER)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  outletId      String?
+  Account       Account[]
+  orders        Order[]    @relation("CustomerOrders")
+  OrderLog      OrderLog[]
+  Session       Session[]
+  Outlet        Outlet?    @relation(fields: [outletId], references: [id])
 
-model CustomerProfile {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  addresses Address[]
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model CourierProfile {
-  id          String   @id @default(uuid())
-  userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  vehicleType String?
-  plateNumber String?
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Address {
-  id                String          @id @default(uuid())
-  customerProfileId String
-  customerProfile   CustomerProfile @relation(fields: [customerProfileId], references: [id], onDelete: Cascade)
-  
-  label             String          // e.g. "Rumah", "Kantor"
-  fullAddress       String
-  city              String
-  postalCode        String?
-  latitude          Float?
-  longitude         Float?
-  
-  pickupOrders      Order[]         @relation("PickupAddress")
-  deliveryOrders    Order[]         @relation("DeliveryAddress")
-  
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  @@index([outletId], map: "User_outletId_fkey")
 }
 
 model Service {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  pricePerKg  Decimal  
-  minWeight   Float?
-  minPrice    Decimal?
-  estimatedDays Int    @default(3)
-  isActive    Boolean  @default(true)
-  
-  orderItems  OrderItem[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String           @id @default(uuid())
+  outletId   String
+  name       String
+  category   Service_category
+  price      Decimal
+  unit       String
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  orderItems OrderItem[]
+  Outlet     Outlet           @relation(fields: [outletId], references: [id], onDelete: Cascade)
+
+  @@index([outletId], map: "Service_outletId_fkey")
 }
 
 model Order {
-  id                String      @id @default(uuid())
-  orderNumber       String      @unique
-  
-  customerId        String
-  customer          User        @relation("CustomerOrders", fields: [customerId], references: [id])
-  
-  pickupAddressId   String
-  pickupAddress     Address     @relation("PickupAddress", fields: [pickupAddressId], references: [id])
-  
-  deliveryAddressId String
-  deliveryAddress   Address     @relation("DeliveryAddress", fields: [deliveryAddressId], references: [id])
-  
-  weight            Float?
-  subtotal          Decimal?    
-  deliveryFee       Decimal?    
-  discount          Decimal?    @default(0) 
-  total             Decimal?    
-  
-  paymentStatus     PaymentStatus @default(UNPAID)
-  orderStatus       OrderStatus   @default(PENDING)
-  
-  pickupDate        DateTime
-  deliveryDate      DateTime?
-  notes             String?     
-  
-  items             OrderItem[]
-  statusHistory     OrderStatusHistory[]
-  deliveries        Delivery[]
-  payment           Payment?
-  
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  id              String              @id @default(uuid())
+  orderNumber     String              @unique
+  customerId      String
+  outletId        String
+  status          Order_status        @default(PENDING)
+  pickupDate      DateTime?
+  pickupTimeSlot  String?
+  deliveryDate    DateTime?
+  deliveryAddress String?             @db.Text
+  totalAmount     Decimal             @default(0.000000000000000000000000000000)
+  paymentStatus   Order_paymentStatus @default(UNPAID)
+  paymentMethod   String              @default("CASH")
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  customer        User                @relation("CustomerOrders", fields: [customerId], references: [id])
+  Outlet          Outlet              @relation(fields: [outletId], references: [id])
+  items           OrderItem[]
+  OrderLog        OrderLog[]
+
+  @@index([customerId], map: "Order_customerId_fkey")
+  @@index([outletId], map: "Order_outletId_fkey")
 }
 
 model OrderItem {
   id        String   @id @default(uuid())
   orderId   String
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  
   serviceId String
+  itemName  String
+  quantity  Float
+  unitPrice Decimal
+  subtotal  Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   service   Service  @relation(fields: [serviceId], references: [id])
-  
-  weight    Float
-  price     Decimal  
-  subtotal  Decimal  
+
+  @@index([orderId], map: "OrderItem_orderId_fkey")
+  @@index([serviceId], map: "OrderItem_serviceId_fkey")
 }
 
-model OrderStatusHistory {
-  id        String      @id @default(uuid())
-  orderId   String
-  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  
-  status    OrderStatus
-  notes     String?
-  
-  createdAt DateTime    @default(now())
+model Account {
+  id                String  @id
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId], map: "Account_userId_fkey")
 }
 
-model Delivery {
-  id          String         @id @default(uuid())
-  orderId     String
-  order       Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  
-  courierId   String?
-  courier     User?          @relation("CourierDeliveries", fields: [courierId], references: [id])
-  
-  type        DeliveryType   // PICKUP or RETURN
-  status      DeliveryStatus @default(ASSIGNED)
-  
-  scheduledAt DateTime?
-  completedAt DateTime?
-  notes       String?
-  
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+model OrderLog {
+  id              String                   @id
+  orderId         String
+  updatedByUserId String
+  previousStatus  OrderLog_previousStatus?
+  newStatus       OrderLog_newStatus
+  timestamp       DateTime                 @default(now())
+  notes           String?                  @db.Text
+  Order           Order                    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  User            User                     @relation(fields: [updatedByUserId], references: [id])
+
+  @@index([orderId], map: "OrderLog_orderId_fkey")
+  @@index([updatedByUserId], map: "OrderLog_updatedByUserId_fkey")
 }
 
-enum DeliveryType {
-  PICKUP
-  RETURN
+model Outlet {
+  id        String    @id
+  name      String
+  address   String    @db.Text
+  latitude  Float?
+  longitude Float?
+  phone     String?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  Order     Order[]
+  Service   Service[]
+  User      User[]
 }
 
-model Payment {
-  id            String        @id @default(uuid())
-  orderId       String        @unique
-  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  
-  amount        Decimal       
-  method        PaymentMethod
-  status        PaymentStatus @default(PENDING)
-  reference     String?
-  
-  paidAt        DateTime?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+model Session {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Session_userId_fkey")
 }
 
-enum PaymentMethod {
-  CASH
-  TRANSFER
-  QRIS
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
-model Notification {
-  id        String   @id @default(uuid())
-  userId    String
-  title     String
-  message   String   
-  isRead    Boolean  @default(false)
-  
-  createdAt DateTime @default(now())
+enum Service_category {
+  KILOAN
+  SATUAN
+  DRY_CLEAN
 }
 
-model Promo {
-  id          String   @id @default(uuid())
-  code        String   @unique
-  description String?
-  discountPct Float?
-  discountAmt Decimal? 
-  isActive    Boolean  @default(true)
-  validUntil  DateTime?
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+enum OrderLog_previousStatus {
+  PENDING
+  PICKUP_SCHEDULED
+  WASHING
+  IRONING
+  READY_TO_DELIVER
+  COMPLETED
+  CANCELLED
 }
 
-model Review {
-  id        String   @id @default(uuid())
-  orderId   String   @unique
-  rating    Int
-  comment   String?  
-  
-  createdAt DateTime @default(now())
+enum OrderLog_newStatus {
+  PENDING
+  PICKUP_SCHEDULED
+  WASHING
+  IRONING
+  READY_TO_DELIVER
+  COMPLETED
+  CANCELLED
 }
 
-model JobApplication {
-  id              String   @id @default(uuid())
-  position        String   // "RIDER" or "CS"
-  fullName        String
-  email           String
-  phone           String
-  dob             DateTime?
-  gender          String?
-  address         String?
-  educationDegree String?
-  educationSchool String?
-  status          String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+enum Order_status {
+  PENDING
+  PICKUP_SCHEDULED
+  WASHING
+  IRONING
+  READY_TO_DELIVER
+  COMPLETED
+  CANCELLED
+}
+
+enum User_role {
+  CUSTOMER
+  STAFF
+  OWNER
+}
+
+enum Order_paymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
 }
