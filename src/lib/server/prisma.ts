@@ -6,7 +6,7 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 // Fallback ke database lokal MAMP (hanya bisa jalan di komputer lokal)
-const fallbackUrl = 'mysql://root:root@localhost:8889/antar_laundry';
+const fallbackUrl = 'mysql://root:root@127.0.0.1:8889/antar_laundry';
 const databaseUrl = env.DATABASE_URL || process.env.DATABASE_URL || fallbackUrl;
 
 export const prisma =
