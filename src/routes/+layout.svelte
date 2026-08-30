@@ -74,7 +74,7 @@
   </main>
 
   {#if !$page.url.pathname.startsWith('/courier') && !$page.url.pathname.startsWith('/admin') && !$page.url.pathname.startsWith('/dashboard')}
-    <footer class="hidden md:block bg-gradient-to-br from-primary-600 to-primary-900 text-primary-100 py-16 relative overflow-hidden">
+    <footer class="bg-gradient-to-br from-primary-600 to-primary-900 text-primary-100 py-16 relative overflow-hidden">
       
       <!-- Optional subtle glow effect -->
       <div class="absolute top-0 right-1/4 w-96 h-96 bg-primary-400 rounded-full mix-blend-screen filter blur-[120px] opacity-30"></div>
