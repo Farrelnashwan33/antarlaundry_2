@@ -5,7 +5,8 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-const databaseUrl = env.DATABASE_URL || process.env.DATABASE_URL;
+const fallbackUrl = 'postgresql://postgres.brjjvmssakeiabjvgaqu:Farrellaundry21@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true';
+const databaseUrl = env.DATABASE_URL || process.env.DATABASE_URL || fallbackUrl;
 
 export const prisma =
   globalForPrisma.prisma ??
