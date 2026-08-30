@@ -60,8 +60,9 @@ export const actions: Actions = {
       });
       // Redirect to login page
     } catch (err: any) {
-      console.error(err);
-      return fail(500, { error: 'Terjadi kesalahan pada server: ' + (err?.message || 'Unknown error') });
+      console.error("Register Error:", err);
+      // Jangan pernah mengekspos raw error Prisma ke client di production
+      return fail(500, { error: 'Terjadi kesalahan pada server. Silakan coba lagi.' });
     }
 
     throw redirect(303, '/login?success=register');

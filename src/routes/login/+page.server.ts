@@ -51,7 +51,8 @@ export const actions: Actions = {
       // We will handle redirect outside try-catch
     } catch (err: any) {
       console.error("Login Error:", err);
-      return fail(500, { error: 'Terjadi kesalahan pada server: ' + (err?.message || 'Unknown error') });
+      // Jangan pernah mengekspos raw error Prisma ke client di production
+      return fail(500, { error: 'Terjadi kesalahan pada server. Silakan coba lagi.' });
     }
 
     if (userRole === 'ADMIN') throw redirect(303, '/admin');
