@@ -40,8 +40,14 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (!user) {
       throw redirect(303, '/login');
     }
-    if (user.role !== 'ADMIN') {
+    if (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
       throw redirect(303, '/dashboard');
+    }
+    
+    // Protect Super Admin only routes
+    const superAdminRoutes = ['/admin/users', '/admin/promos', '/admin/analytics', '/admin/applications'];
+    if (superAdminRoutes.some(route => pathname.startsWith(route)) && user.role !== 'SUPER_ADMIN') {
+      throw redirect(303, '/admin');
     }
   }
 

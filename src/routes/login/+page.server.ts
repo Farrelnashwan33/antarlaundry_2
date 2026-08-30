@@ -55,7 +55,7 @@ export const actions: Actions = {
       return fail(500, { error: 'Terjadi kesalahan pada server. Silakan coba lagi.' });
     }
 
-    if (userRole === 'ADMIN') throw redirect(303, '/admin');
+    if (userRole === 'ADMIN' || userRole === 'SUPER_ADMIN') throw redirect(303, '/admin');
     if (userRole === 'COURIER') throw redirect(303, '/courier');
     throw redirect(303, '/dashboard');
   }

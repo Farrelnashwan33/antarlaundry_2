@@ -17,6 +17,7 @@ datasource db {
 enum Role {
   CUSTOMER
   ADMIN
+  SUPER_ADMIN
   COURIER
   STAFF
 }
