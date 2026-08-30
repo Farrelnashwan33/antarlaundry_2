@@ -5,7 +5,7 @@ import prisma from '$lib/server/prisma';
 export const load: PageServerLoad = async ({ locals }) => {
   const user = locals.user;
   
-  if (!user || user.role !== 'ADMIN') {
+  if (!user || user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
     throw redirect(303, '/dashboard');
   }
 

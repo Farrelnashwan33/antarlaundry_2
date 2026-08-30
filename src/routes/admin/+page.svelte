@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/stores';
   
   let { data } = $props();
   let orders = $derived(data.orders);
