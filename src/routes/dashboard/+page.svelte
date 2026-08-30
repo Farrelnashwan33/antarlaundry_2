@@ -47,6 +47,80 @@
   <title>Dashboard - Antar Laundry</title>
 </svelte:head>
 
+  <!-- Timeline Snippet -->
+  {#snippet timeline()}
+    <div>
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-surface-900">Status Pesanan Aktif</h3>
+        {#if currentOrder}
+          <span class="text-xs font-mono text-surface-400">#{currentOrder.orderNumber.split('-')[1]}</span>
+        {/if}
+      </div>
+
+      {#if !currentOrder}
+        <div class="text-center py-6 text-surface-400 text-sm">
+          Tidak ada pesanan aktif.
+        </div>
+      {:else}
+        {@const step1 = getStepStatus(currentOrder, 'Pesanan Dibuat')}
+        {@const step2 = getStepStatus(currentOrder, 'Dalam Proses')}
+        {@const step3 = getStepStatus(currentOrder, 'Laundry Selesai')}
+        {@const step4 = getStepStatus(currentOrder, 'Siap Diantar')}
+        {@const step5 = getStepStatus(currentOrder, 'Selesai')}
+        <div class="relative border-l-2 border-surface-200 ml-3 space-y-8 mt-4">
+          
+          <!-- Step 1 -->
+          <div class="relative pl-6">
+            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step1 === 'completed' ? 'bg-green-500 border-green-500' : (step1 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
+            <h4 class="font-bold text-sm {step1 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Pesanan Dibuat</h4>
+            <p class="text-xs text-surface-500 mt-1">{new Date(currentOrder.createdAt).toLocaleDateString('id-ID')} {new Date(currentOrder.createdAt).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}</p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="relative pl-6">
+            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step2 === 'completed' ? 'bg-green-500 border-green-500' : (step2 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
+            <h4 class="font-bold text-sm {step2 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Dalam Proses</h4>
+            {#if step2 !== 'upcoming'}
+               <p class="text-xs text-surface-500 mt-1">Sedang dikerjakan oleh tim kami</p>
+            {/if}
+          </div>
+
+          <!-- Step 3 -->
+          <div class="relative pl-6">
+            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step3 === 'completed' ? 'bg-green-500 border-green-500' : (step3 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
+            <h4 class="font-bold text-sm {step3 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Laundry Selesai</h4>
+            <p class="text-xs text-surface-500 mt-1">{step3 !== 'upcoming' ? 'Pakaian sudah bersih & rapi' : 'Menunggu antrian'}</p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="relative pl-6">
+            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step4 === 'completed' ? 'bg-green-500 border-green-500' : (step4 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
+            <h4 class="font-bold text-sm {step4 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Siap Diantar</h4>
+            <p class="text-xs text-surface-500 mt-1">Menunggu kurir penjemputan</p>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="relative pl-6">
+            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step5 === 'completed' ? 'bg-green-500 border-green-500' : (step5 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
+            <h4 class="font-bold text-sm {step5 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Selesai</h4>
+            <p class="text-xs text-surface-500 mt-1">Pesanan diterima</p>
+          </div>
+        </div>
+
+        <!-- Estimate Info -->
+        <div class="mt-8 bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <div>
+            <span class="text-xs text-surface-500 block mb-0.5">Estimasi Selesai</span>
+            <span class="text-sm font-bold text-blue-700">Hari ini, 17:00 - 18:00</span>
+          </div>
+        </div>
+      {/if}
+    </div>
+  {/snippet}
+
 <div class="flex flex-col lg:flex-row min-h-full">
   
   <!-- Main Content Column -->
@@ -154,6 +228,11 @@
       </div>
     </div>
 
+    <!-- Mobile-only Timeline -->
+    <div class="block lg:hidden mb-10 bg-white border border-surface-200 rounded-3xl p-6 shadow-sm">
+      {@render timeline()}
+    </div>
+
     <!-- Quick Menu -->
     <div class="mb-10">
       <h2 class="text-xl font-bold text-surface-900 mb-6">Menu Cepat</h2>
@@ -202,76 +281,9 @@
   <!-- Right Sidebar / Panel -->
   <div class="w-full lg:w-80 bg-white p-6 lg:p-8 flex flex-col gap-8 h-full">
     
-    <!-- Timeline -->
-    <div>
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="font-bold text-surface-900">Status Pesanan Aktif</h3>
-        {#if currentOrder}
-          <span class="text-xs font-mono text-surface-400">#{currentOrder.orderNumber.split('-')[1]}</span>
-        {/if}
-      </div>
-
-      {#if !currentOrder}
-        <div class="text-center py-6 text-surface-400 text-sm">
-          Tidak ada pesanan aktif.
-        </div>
-      {:else}
-        {@const step1 = getStepStatus(currentOrder, 'Pesanan Dibuat')}
-        {@const step2 = getStepStatus(currentOrder, 'Dalam Proses')}
-        {@const step3 = getStepStatus(currentOrder, 'Laundry Selesai')}
-        {@const step4 = getStepStatus(currentOrder, 'Siap Diantar')}
-        {@const step5 = getStepStatus(currentOrder, 'Selesai')}
-        <div class="relative border-l-2 border-surface-200 ml-3 space-y-8 mt-4">
-          
-          <!-- Step 1 -->
-          <div class="relative pl-6">
-            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step1 === 'completed' ? 'bg-green-500 border-green-500' : (step1 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
-            <h4 class="font-bold text-sm {step1 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Pesanan Dibuat</h4>
-            <p class="text-xs text-surface-500 mt-1">{new Date(currentOrder.createdAt).toLocaleDateString('id-ID')} {new Date(currentOrder.createdAt).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}</p>
-          </div>
-
-          <!-- Step 2 -->
-          <div class="relative pl-6">
-            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step2 === 'completed' ? 'bg-green-500 border-green-500' : (step2 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
-            <h4 class="font-bold text-sm {step2 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Dalam Proses</h4>
-            {#if step2 !== 'upcoming'}
-               <p class="text-xs text-surface-500 mt-1">Sedang dikerjakan oleh tim kami</p>
-            {/if}
-          </div>
-
-          <!-- Step 3 -->
-          <div class="relative pl-6">
-            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step3 === 'completed' ? 'bg-green-500 border-green-500' : (step3 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
-            <h4 class="font-bold text-sm {step3 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Laundry Selesai</h4>
-            <p class="text-xs text-surface-500 mt-1">{step3 !== 'upcoming' ? 'Pakaian sudah bersih & rapi' : 'Menunggu antrian'}</p>
-          </div>
-
-          <!-- Step 4 -->
-          <div class="relative pl-6">
-            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step4 === 'completed' ? 'bg-green-500 border-green-500' : (step4 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
-            <h4 class="font-bold text-sm {step4 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Siap Diantar</h4>
-            <p class="text-xs text-surface-500 mt-1">Menunggu kurir penjemputan</p>
-          </div>
-
-          <!-- Step 5 -->
-          <div class="relative pl-6">
-            <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 {step5 === 'completed' ? 'bg-green-500 border-green-500' : (step5 === 'current' ? 'bg-blue-500 border-blue-500 ring-4 ring-blue-100' : 'bg-white border-surface-300')}"></div>
-            <h4 class="font-bold text-sm {step5 !== 'upcoming' ? 'text-surface-900' : 'text-surface-400'}">Selesai</h4>
-            <p class="text-xs text-surface-500 mt-1">Pesanan diterima</p>
-          </div>
-        </div>
-
-        <!-- Estimate Info -->
-        <div class="mt-8 bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-center gap-4">
-          <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-blue-600 shadow-sm shrink-0">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          </div>
-          <div>
-            <span class="text-xs text-surface-500 block mb-0.5">Estimasi Selesai</span>
-            <span class="text-sm font-bold text-blue-700">Hari ini, 17:00 - 18:00</span>
-          </div>
-        </div>
-      {/if}
+    <!-- Timeline (Desktop Only) -->
+    <div class="hidden lg:block">
+      {@render timeline()}
     </div>
 
     <!-- Promo Banner (Dynamic, set by admin) -->
