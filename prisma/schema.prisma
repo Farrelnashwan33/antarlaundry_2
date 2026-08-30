@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -26,7 +27,7 @@ model User {
   Session       Session[]
   Outlet        Outlet?    @relation(fields: [outletId], references: [id])
 
-  @@index([outletId], map: "User_outletId_fkey")
+  @@index([outletId])
 }
 
 model Service {
@@ -41,7 +42,7 @@ model Service {
   orderItems OrderItem[]
   Outlet     Outlet           @relation(fields: [outletId], references: [id], onDelete: Cascade)
 
-  @@index([outletId], map: "Service_outletId_fkey")
+  @@index([outletId])
 }
 
 model Order {
@@ -64,8 +65,8 @@ model Order {
   items           OrderItem[]
   OrderLog        OrderLog[]
 
-  @@index([customerId], map: "Order_customerId_fkey")
-  @@index([outletId], map: "Order_outletId_fkey")
+  @@index([customerId])
+  @@index([outletId])
 }
 
 model OrderItem {
@@ -81,8 +82,8 @@ model OrderItem {
   order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   service   Service  @relation(fields: [serviceId], references: [id])
 
-  @@index([orderId], map: "OrderItem_orderId_fkey")
-  @@index([serviceId], map: "OrderItem_serviceId_fkey")
+  @@index([orderId])
+  @@index([serviceId])
 }
 
 model Account {
@@ -101,7 +102,7 @@ model Account {
   User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@index([userId], map: "Account_userId_fkey")
+  @@index([userId])
 }
 
 model OrderLog {
@@ -115,8 +116,8 @@ model OrderLog {
   Order           Order                    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   User            User                     @relation(fields: [updatedByUserId], references: [id])
 
-  @@index([orderId], map: "OrderLog_orderId_fkey")
-  @@index([updatedByUserId], map: "OrderLog_updatedByUserId_fkey")
+  @@index([orderId])
+  @@index([updatedByUserId])
 }
 
 model Outlet {
@@ -141,7 +142,7 @@ model Session {
   expires      DateTime
   User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId], map: "Session_userId_fkey")
+  @@index([userId])
 }
 
 model VerificationToken {
