@@ -10,11 +10,6 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   const staffUsers = await prisma.user.findMany({
-    where: { 
-      role: {
-        not: 'CUSTOMER'
-      }
-    },
     include: {
       courierProfile: true
     },
@@ -109,6 +104,7 @@ export const actions: Actions = {
     const email = data.get('email') as string;
     const phone = data.get('phone') as string;
     const role = data.get('role') as string;
+    const password = data.get('password') as string;
 
     if (!userId || !name || !email || !role) {
       return fail(400, { error: 'Missing required fields' });
@@ -121,14 +117,21 @@ export const actions: Actions = {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return fail(404, { error: 'User not found' });
 
+    let updateData: any = {
+      name,
+      email,
+      phone: phone || null,
+      role: role as any
+    };
+
+    if (password && password.trim() !== '') {
+      const bcrypt = await import('bcryptjs');
+      updateData.passwordHash = await bcrypt.default.hash(password.trim(), 10);
+    }
+
     await prisma.user.update({
       where: { id: userId },
-      data: {
-        name,
-        email,
-        phone: phone || null,
-        role: role as any
-      }
+      data: updateData
     });
 
     if (role === 'COURIER' && user.role !== 'COURIER') {

@@ -61,6 +61,11 @@
             <option value="CUSTOMER" selected={editingStaff.role === 'CUSTOMER'}>Demote to Customer</option>
           </select>
         </div>
+        <div class="flex flex-col gap-1 border-t border-surface-100 mt-2 pt-2">
+          <label for="edit-password" class="text-xs font-medium text-surface-700">Reset Password (Opsional)</label>
+          <input type="text" id="edit-password" name="password" class="w-full px-3 py-2 text-sm border border-surface-200 rounded-md focus:outline-none focus:border-blue-500" placeholder="Biarkan kosong jika tidak ingin mengubah password">
+          <p class="text-[10px] text-surface-500">Jika diisi, kata sandi pengguna ini akan langsung diganti dengan yang baru.</p>
+        </div>
         <div class="flex justify-end gap-2 mt-4 pt-4 border-t border-surface-100">
           <button type="button" onclick={() => editingStaff = null} class="px-4 py-2 text-sm font-medium text-surface-600 bg-white border border-surface-200 rounded-md hover:bg-surface-50">Cancel</button>
           <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 shadow-sm">Save Changes</button>
@@ -82,7 +87,7 @@
       <span>Users & Roles</span>
     </div>
     <div class="flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-surface-900 tracking-tight">Staff & Roles</h1>
+      <h1 class="text-3xl font-bold text-surface-900 tracking-tight">Users & Roles</h1>
       <button onclick={() => isAddingStaff = !isAddingStaff} class="flex items-center gap-1 bg-blue-600 text-white shadow-sm px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Add Staff
       </button>
