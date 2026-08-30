@@ -59,9 +59,9 @@ export const actions: Actions = {
         }
       });
       // Redirect to login page
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      return fail(500, { error: 'Terjadi kesalahan pada server.' });
+      return fail(500, { error: 'Terjadi kesalahan pada server: ' + (err?.message || 'Unknown error') });
     }
 
     throw redirect(303, '/login?success=register');

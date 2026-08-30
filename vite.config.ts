@@ -13,7 +13,7 @@ export default defineConfig({
 				runes: ({ filename }) =>
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
-			adapter: process.env.VERCEL ? vercelAdapter() : cloudflareAdapter()
+			adapter: vercelAdapter()
 		})
 	]
 });
