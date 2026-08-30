@@ -39,7 +39,7 @@
       <Input label="Kata Sandi" id="password" type="password" placeholder="Masukkan kata sandi" required />
 
       <div class="flex items-center justify-end mb-6">
-        <a href="https://wa.me/628122584173?text=Halo%20Admin,%20saya%20lupa%20kata%20sandi%20akun%20AntarLaundry%20saya.%20Mohon%20bantuannya%20untuk%20reset." target="_blank" rel="noopener noreferrer" class="text-sm text-primary hover:underline font-medium">Lupa kata sandi?</a>
+        <a href="https://wa.me/6285720387781?text=Halo%20Admin,%20saya%20lupa%20kata%20sandi%20akun%20AntarLaundry%20saya.%20Mohon%20bantuannya%20untuk%20reset." target="_blank" rel="noopener noreferrer" class="text-sm text-primary hover:underline font-medium">Lupa kata sandi?</a>
       </div>
 
       <Button type="submit" class="w-full" {loading}>Masuk</Button>
