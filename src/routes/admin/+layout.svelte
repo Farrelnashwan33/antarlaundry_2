@@ -86,9 +86,9 @@
           {#each navItems as item}
             <a 
               href={item.path} 
-              class="flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors { $page.url.pathname === item.path || $page.url.pathname.startsWith(item.path + '/') ? 'bg-blue-50 text-blue-700 font-medium' : 'text-surface-600 hover:bg-surface-50 hover:text-surface-900' }"
+              class="flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors { ($page.url.pathname === item.path || (item.path !== '/admin' && $page.url.pathname.startsWith(item.path + '/'))) ? 'bg-blue-50 text-blue-700 font-medium' : 'text-surface-600 hover:bg-surface-50 hover:text-surface-900' }"
             >
-              <svg class="w-4 h-4 { $page.url.pathname === item.path || $page.url.pathname.startsWith(item.path + '/') ? 'text-blue-600' : 'text-surface-400' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 { ($page.url.pathname === item.path || (item.path !== '/admin' && $page.url.pathname.startsWith(item.path + '/'))) ? 'text-blue-600' : 'text-surface-400' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon}></path>
               </svg>
               {item.name}
@@ -115,9 +115,9 @@
             <a 
               href={item.path} 
               onclick={() => isMobileMenuOpen = false}
-              class="flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium { $page.url.pathname === item.path ? 'bg-blue-50 text-blue-700' : 'text-surface-600' }"
+              class="flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium { ($page.url.pathname === item.path || (item.path !== '/admin' && $page.url.pathname.startsWith(item.path + '/'))) ? 'bg-blue-50 text-blue-700' : 'text-surface-600' }"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 { ($page.url.pathname === item.path || (item.path !== '/admin' && $page.url.pathname.startsWith(item.path + '/'))) ? 'text-blue-600' : 'text-surface-400' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon}></path>
               </svg>
               {item.name}
