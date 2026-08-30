@@ -4,6 +4,7 @@
   let { children, data } = $props();
   let user = $derived(data.user);
   let profile = $derived(data.profile);
+  let isMobileMenuOpen = $state(false);
 
   // Navigation Links
   const navLinks = [
@@ -18,10 +19,52 @@
   ];
 </script>
 
-<div class="flex h-screen bg-surface-50 font-sans overflow-hidden">
+<div class="flex flex-col md:flex-row h-screen bg-surface-50 font-sans overflow-hidden w-full relative">
   
-  <!-- Sidebar -->
-  <aside class="w-72 bg-white border-r border-surface-200 flex flex-col justify-between hidden md:flex h-full">
+  <!-- Mobile Header -->
+  <header class="md:hidden bg-white border-b border-surface-200 p-4 flex items-center justify-between shrink-0 z-30">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold shadow-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+      <span class="font-bold text-blue-700">AntarLaundry</span>
+    </div>
+    <button onclick={() => isMobileMenuOpen = !isMobileMenuOpen} class="p-2 text-surface-600">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path></svg>
+    </button>
+  </header>
+
+  <!-- Mobile Menu -->
+  {#if isMobileMenuOpen}
+    <div class="md:hidden absolute top-[73px] inset-x-0 bottom-0 bg-white z-40 flex flex-col">
+      <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+        {#each navLinks as link}
+          <a 
+            href={link.href} 
+            onclick={() => isMobileMenuOpen = false}
+            class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm
+              {$page.url.pathname === link.href ? 'bg-blue-50 text-blue-700' : 'text-surface-600'}"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={link.icon}></path>
+            </svg>
+            {link.label}
+          </a>
+        {/each}
+      </nav>
+      <div class="p-4 border-t border-surface-100">
+        <form method="POST" action="/logout">
+          <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-600 bg-red-50">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </div>
+  {/if}
+  
+  <!-- Sidebar (Desktop) -->
+  <aside class="w-72 bg-white border-r border-surface-200 flex-col justify-between hidden md:flex shrink-0">
     
     <div class="flex flex-col h-full">
       <!-- Logo Area -->
