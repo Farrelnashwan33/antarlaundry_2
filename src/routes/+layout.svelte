@@ -2,7 +2,7 @@
   import './layout.css';
   import Navbar from '$lib/components/Navbar.svelte';
   import LiveChat from '$lib/components/LiveChat.svelte';
-  import { page } from '$app/stores';
+  import { page, navigating } from '$app/stores';
   import { onMount } from 'svelte';
   
   let { children } = $props();
@@ -63,6 +63,13 @@
   <meta name="description" content="Aplikasi layanan antar jemput laundry modern, cepat, dan terpercaya." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </svelte:head>
+
+<!-- Global Navigation Loading Bar -->
+{#if $navigating}
+  <div class="fixed top-0 left-0 right-0 h-1 bg-blue-100 z-[9999] overflow-hidden">
+    <div class="h-full bg-blue-600 w-1/3 animate-[loading_1s_ease-in-out_infinite]"></div>
+  </div>
+{/if}
 
 <div class="min-h-screen flex flex-col bg-[var(--bg-color)]">
   {#if !$page.url.pathname.startsWith('/courier') && !$page.url.pathname.startsWith('/admin') && !$page.url.pathname.startsWith('/dashboard')}
