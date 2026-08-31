@@ -10,6 +10,12 @@
   ];
 
   let user = $derived($page.data.user);
+
+  function getDashboardUrl(role: string) {
+    if (role === 'ADMIN' || role === 'SUPER_ADMIN') return '/admin';
+    if (role === 'COURIER') return '/courier';
+    return '/dashboard';
+  }
 </script>
 
 <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-surface-200">
@@ -40,7 +46,7 @@
       <div class="hidden md:flex items-center gap-4">
         {#if user}
           <span class="text-sm text-surface-600">Halo, {user.role}</span>
-          <Button href={user.role === 'ADMIN' ? '/admin' : '/dashboard'} variant="primary" size="sm">
+          <Button href={getDashboardUrl(user.role)} variant="primary" size="sm">
             Dashboard
           </Button>
           <form action="/logout" method="POST">
@@ -73,7 +79,7 @@
       <span class="text-[10px] font-medium">Layanan</span>
     </a>
 
-    <a href={user ? (user.role === 'ADMIN' ? '/admin' : '/dashboard') : '/login'} class="flex flex-col items-center justify-center w-full h-full space-y-1 text-surface-500 hover:text-primary {$page.url.pathname.startsWith('/dashboard') || $page.url.pathname.startsWith('/admin') ? 'text-primary' : ''}">
+    <a href={user ? getDashboardUrl(user.role) : '/login'} class="flex flex-col items-center justify-center w-full h-full space-y-1 text-surface-500 hover:text-primary {$page.url.pathname.startsWith('/dashboard') || $page.url.pathname.startsWith('/admin') ? 'text-primary' : ''}">
       <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
       </svg>

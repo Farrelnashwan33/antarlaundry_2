@@ -6,7 +6,7 @@ import { dev } from '$app/environment';
 
 export const load: PageServerLoad = async ({ locals }) => {
   if (locals.user) {
-    if (locals.user.role === 'ADMIN') throw redirect(302, '/admin');
+    if (locals.user.role === 'ADMIN' || locals.user.role === 'SUPER_ADMIN') throw redirect(302, '/admin');
     if (locals.user.role === 'COURIER') throw redirect(302, '/courier');
     throw redirect(302, '/dashboard');
   }
