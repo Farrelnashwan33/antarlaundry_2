@@ -77,9 +77,14 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     discountAmt: activePromoRaw.discountAmt ? Number(activePromoRaw.discountAmt) : null
   } : null;
 
+  const wallet = await prisma.wallet.findUnique({
+    where: { userId: user.id }
+  });
+
   return {
     activeOrders: serializedOrders,
     totalSpent,
-    activePromo
+    activePromo,
+    wallet: wallet ? { balance: Number(wallet.balance) } : { balance: 0 }
   };
 };

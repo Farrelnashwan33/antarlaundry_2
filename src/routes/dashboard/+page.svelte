@@ -185,6 +185,25 @@
       </div>
     </div>
 
+    <!-- Wallet Widget -->
+    <div class="mb-10 bg-blue-600 rounded-3xl p-6 lg:p-8 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+      <div class="absolute -top-10 -right-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl"></div>
+      <div class="absolute bottom-0 right-20 w-24 h-24 bg-blue-400 opacity-20 rounded-full blur-xl"></div>
+      <div class="relative z-10 flex items-center gap-6 w-full md:w-auto">
+        <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+        </div>
+        <div>
+          <p class="text-blue-100 font-medium text-sm">Saldo Saya</p>
+          <h2 class="text-3xl font-black mt-1">{formatCurrency(data.wallet?.balance || 0)}</h2>
+        </div>
+      </div>
+      <a href="/dashboard/wallet" class="relative z-10 w-full md:w-auto bg-white text-blue-600 px-6 py-3.5 rounded-xl font-bold shadow-sm hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+        Top Up Saldo
+      </a>
+    </div>
+
     <!-- Active Orders Box -->
     <div class="mb-10">
       <div class="flex justify-between items-center mb-6">

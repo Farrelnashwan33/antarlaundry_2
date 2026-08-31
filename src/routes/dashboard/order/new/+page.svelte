@@ -162,6 +162,36 @@
               </div>
             </div>
 
+            <!-- Payment Method -->
+            <div class="pt-6 mt-6 border-t border-surface-100 space-y-4">
+              <h2 class="text-sm font-bold text-surface-800 uppercase tracking-wider mb-4 flex items-center">
+                <span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span> Metode Pembayaran
+              </h2>
+              
+              <div class="grid grid-cols-1 gap-4">
+                <label class="flex items-start gap-4 p-4 rounded-2xl border-2 border-surface-200 cursor-pointer hover:bg-surface-50 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+                  <div class="flex-1">
+                    <div class="font-bold text-surface-900 text-sm">Bayar Nanti (Tunai/Transfer)</div>
+                    <div class="text-xs text-surface-500 mt-1">Bayar saat kurir mengambil atau mengantar pakaian</div>
+                  </div>
+                  <input type="radio" name="paymentMethod" value="CASH" class="w-5 h-5 text-blue-600 border-surface-300 focus:ring-blue-500 mt-0.5" checked>
+                </label>
+                
+                <label class="flex items-start gap-4 p-4 rounded-2xl border-2 border-surface-200 cursor-pointer hover:bg-surface-50 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+                  <div class="flex-1">
+                    <div class="font-bold text-surface-900 text-sm">Saldo AntarLaundry</div>
+                    <div class="text-xs mt-1 {data.wallet.balance >= estimatedTotal && estimatedTotal > 0 ? 'text-green-600' : 'text-red-500 font-medium'}">
+                      Saldo Anda: {formatCurrency(data.wallet.balance)}
+                      {#if estimatedTotal > 0 && data.wallet.balance < estimatedTotal}
+                        <br/>(Saldo tidak mencukupi)
+                      {/if}
+                    </div>
+                  </div>
+                  <input type="radio" name="paymentMethod" value="SALDO" class="w-5 h-5 text-blue-600 border-surface-300 focus:ring-blue-500 mt-0.5" disabled={estimatedTotal > 0 && data.wallet.balance < estimatedTotal}>
+                </label>
+              </div>
+            </div>
+
             <!-- Summary & Submit -->
             <div class="pt-6 mt-6 border-t border-surface-100">
               <div class="bg-blue-50 rounded-2xl p-5 mb-6 flex justify-between items-center border border-blue-100">
