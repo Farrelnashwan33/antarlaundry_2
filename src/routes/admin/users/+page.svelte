@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
 
-  let { data } = $props();
+  let { data, form } = $props();
   let staffUsers = $derived(data.staffUsers);
   let isAddingStaff = $state(false);
   let searchQuery = $state('');
@@ -93,6 +93,12 @@
       </button>
     </div>
   </div>
+
+  {#if form?.error}
+    <div class="bg-red-50 text-red-600 border border-red-100 px-4 py-3 rounded-lg text-sm font-medium animate-in fade-in">
+      {form.error}
+    </div>
+  {/if}
 
   {#if isAddingStaff}
     <div class="bg-white rounded-xl shadow-sm border border-surface-100 p-5 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4 duration-200">

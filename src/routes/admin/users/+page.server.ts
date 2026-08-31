@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
   changeRole: async ({ request, locals }) => {
-    if (locals.user?.role !== 'ADMIN') return fail(403);
+    if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
     
     const data = await request.formData();
     const userId = data.get('userId') as string;
@@ -45,7 +45,7 @@ export const actions: Actions = {
   },
 
   addStaff: async ({ request, locals }) => {
-    if (locals.user?.role !== 'ADMIN') return fail(403);
+    if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
     
     const data = await request.formData();
     const name = data.get('name') as string;
@@ -96,7 +96,7 @@ export const actions: Actions = {
   },
 
   updateStaff: async ({ request, locals }) => {
-    if (locals.user?.role !== 'ADMIN') return fail(403);
+    if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
     
     const data = await request.formData();
     const userId = data.get('userId') as string;
@@ -152,7 +152,7 @@ export const actions: Actions = {
   },
 
   deleteStaff: async ({ request, locals }) => {
-    if (locals.user?.role !== 'ADMIN') return fail(403);
+    if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
     
     const data = await request.formData();
     const userId = data.get('userId') as string;
@@ -164,9 +164,16 @@ export const actions: Actions = {
       return fail(400, { error: 'Cannot delete yourself' });
     }
 
-    await prisma.user.delete({
-      where: { id: userId }
-    });
+    try {
+      await prisma.user.delete({
+        where: { id: userId }
+      });
+    } catch (err: any) {
+      if (err.code === 'P2003') {
+        return fail(400, { error: 'Pengguna ini tidak dapat dihapus karena masih memiliki data pesanan atau transaksi.' });
+      }
+      return fail(500, { error: 'Terjadi kesalahan saat menghapus pengguna.' });
+    }
 
     return { success: true };
   }
