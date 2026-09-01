@@ -30,7 +30,7 @@
     <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
       <div>
         <h1 class="text-3xl font-bold text-surface-900">{application.fullName}</h1>
-        <p class="text-surface-600 mt-1 text-lg">Melamar sebagai: <span class="font-bold {application.position === 'CS' ? 'text-blue-600' : 'text-orange-600'}">{application.position === 'CS' ? 'Customer Success Staff' : 'Kurir Operasional (Rider)'}</span></p>
+        <p class="text-surface-600 mt-1 text-lg">Melamar sebagai: <span class="font-bold {application.position === 'CS' ? 'text-blue-600' : 'text-orange-600'}">{application.position === 'CS' ? 'Customer Success Staff' : 'Go Laundry (Mitra)'}</span></p>
       </div>
       
       <div class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold {application.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : application.status === 'ACCEPTED' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">

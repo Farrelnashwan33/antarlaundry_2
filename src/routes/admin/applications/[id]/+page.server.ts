@@ -33,7 +33,7 @@ export const actions = {
       waNumber = '62' + waNumber.substring(1);
     }
     
-    const position = app.position === 'CS' ? 'Customer Success Staff' : 'Kurir Operasional (Rider)';
+    const position = app.position === 'CS' ? 'Customer Success Staff' : 'Go Laundry (Mitra)';
     const message = `Halo ${app.fullName}, selamat! 🎉\n\nKami dari tim HRD Antar Laundry ingin mengabarkan bahwa lamaran Anda untuk posisi *${position}* telah kami nyatakan *LAYAK & DITERIMA*.\n\nSilakan balas pesan ini untuk informasi dan instruksi lebih lanjut. Terima kasih!`;
     
     const encodedMessage = encodeURIComponent(message);

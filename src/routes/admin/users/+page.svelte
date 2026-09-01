@@ -56,8 +56,8 @@
           <label for="edit-role" class="text-xs font-medium text-surface-700">Role</label>
           <select id="edit-role" name="role" class="w-full px-3 py-2 text-sm border border-surface-200 rounded-md focus:outline-none focus:border-blue-500">
             <option value="ADMIN" selected={editingStaff.role === 'ADMIN'}>Admin</option>
-            <option value="COURIER" selected={editingStaff.role === 'COURIER'}>Courier</option>
-            <option value="STAFF" selected={editingStaff.role === 'STAFF'}>Staff</option>
+            <option value="COURIER" selected={editingStaff.role === 'COURIER'}>Go Laundry</option>
+            <option value="STAFF" selected={editingStaff.role === 'STAFF'}>Staff Khusus</option>
             <option value="CUSTOMER" selected={editingStaff.role === 'CUSTOMER'}>Demote to Customer</option>
           </select>
         </div>
@@ -132,7 +132,7 @@
           <div class="text-xs font-medium text-surface-700">Role</div>
           <div class="flex gap-4 mt-1">
             <label class="flex items-center gap-2 text-sm text-surface-700 cursor-pointer">
-              <input type="radio" name="role" value="COURIER" checked class="text-blue-600 focus:ring-blue-500"> Courier
+              <input type="radio" name="role" value="COURIER" checked class="text-blue-600 focus:ring-blue-500"> Go Laundry
             </label>
             <label class="flex items-center gap-2 text-sm text-surface-700 cursor-pointer">
               <input type="radio" name="role" value="ADMIN" class="text-blue-600 focus:ring-blue-500"> Admin
@@ -191,7 +191,7 @@
                 {#if staff.role === 'ADMIN'}
                   <span class="text-purple-600 bg-purple-50 border border-purple-100/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Admin</span>
                 {:else if staff.role === 'COURIER'}
-                  <span class="text-blue-600 bg-blue-50 border border-blue-100/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Courier</span>
+                  <span class="text-blue-600 bg-blue-50 border border-blue-100/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Go Laundry</span>
                 {:else}
                   <span class="text-slate-600 bg-slate-50 border border-slate-100/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">{staff.role}</span>
                 {/if}

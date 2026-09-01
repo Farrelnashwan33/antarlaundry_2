@@ -18,7 +18,7 @@
   <div class="mb-8 flex justify-between items-center">
     <div>
       <h1 class="text-3xl font-bold text-surface-900">Data Pelamar Kerja</h1>
-      <p class="text-surface-500 mt-1">Daftar kandidat Kurir Operasional & Customer Success.</p>
+      <p class="text-surface-500 mt-1">Daftar kandidat Go Laundry & Customer Success.</p>
     </div>
   </div>
 
@@ -43,7 +43,7 @@
               </td>
               <td class="p-4">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {app.position === 'CS' ? 'bg-blue-50 text-blue-700' : 'bg-orange-50 text-orange-700'}">
-                  {app.position === 'CS' ? 'Customer Success' : 'Kurir (Rider)'}
+                  {app.position === 'CS' ? 'Customer Success' : 'Go Laundry (Mitra)'}
                 </span>
               </td>
               <td class="p-4">
