@@ -14,20 +14,9 @@ export const load: PageServerLoad = async ({ locals }) => {
     where: { userId: user.id }
   });
 
-  // Global Queue: Deliveries that are waiting for a courier (courierId is null)
-  const globalQueue = await prisma.delivery.findMany({
-    where: { courierId: null, status: 'ASSIGNED' },
-    include: {
-      order: {
-        include: {
-          customer: true,
-          pickupAddress: true,
-          deliveryAddress: true,
-          items: { include: { service: true } }
-        }
-      }
-    },
-    orderBy: { createdAt: 'asc' }
+  // Global Queue Count: Deliveries that are waiting for a courier (courierId is null)
+  const globalQueueCount = await prisma.delivery.count({
+    where: { courierId: null, status: 'ASSIGNED' }
   });
 
   // Active Deliveries: Deliveries accepted by this courier that are not finished
@@ -54,7 +43,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     where: { courierId: user.id, status: 'DELIVERED' }
   });
   
-  const allTasksCount = globalQueue.length + activeDeliveries.length + totalCompleted;
+  const allTasksCount = globalQueueCount + activeDeliveries.length + totalCompleted;
 
   // Serialize orders inside deliveries to handle Decimal objects from Prisma
   const serializeDelivery = (delivery: any) => ({
@@ -80,11 +69,10 @@ export const load: PageServerLoad = async ({ locals }) => {
   });
 
   return {
-    globalQueue: globalQueue.map(serializeDelivery),
     activeDeliveries: activeDeliveries.map(serializeDelivery),
     stats: {
       totalTasks: allTasksCount,
-      globalQueueCount: globalQueue.length,
+      globalQueueCount: globalQueueCount,
       activeCount: activeDeliveries.length,
       completedCount: totalCompleted
     },
@@ -123,38 +111,6 @@ export const actions: Actions = {
       update: { vehicleType: vehicleType as any },
       create: { userId: locals.user.id, vehicleType: vehicleType as any }
     });
-
-    return { success: true };
-  },
-
-  acceptTask: async ({ request, locals }) => {
-    if (locals.user?.role !== 'COURIER') return fail(403);
-    
-    const data = await request.formData();
-    const deliveryId = data.get('deliveryId') as string;
-
-    if (!deliveryId) return fail(400);
-
-    const delivery = await prisma.delivery.findUnique({ where: { id: deliveryId } });
-    if (!delivery || delivery.courierId) {
-      return fail(400, { error: 'Tugas sudah diambil kurir lain atau tidak valid.' });
-    }
-
-    // Assign to courier and update status
-    await prisma.delivery.update({
-      where: { id: deliveryId },
-      data: { 
-        courierId: locals.user.id,
-        status: delivery.type === 'PICKUP' ? 'PICKUP' : 'OUT_FOR_DELIVERY'
-      }
-    });
-
-    if (delivery.type !== 'PICKUP') {
-      await prisma.order.update({
-        where: { id: delivery.orderId },
-        data: { orderStatus: 'DELIVERY' }
-      });
-    }
 
     return { success: true };
   },

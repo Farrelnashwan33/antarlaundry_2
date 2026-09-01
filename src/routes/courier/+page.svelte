@@ -4,7 +4,6 @@
   let { data } = $props();
   
   // Deriving data
-  let globalQueue = $derived(data.globalQueue);
   let activeDeliveries = $derived(data.activeDeliveries);
   let stats = $derived(data.stats);
   let profile = $derived(data.profile);
@@ -80,67 +79,9 @@
   </div>
 
   <!-- Tables Section -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="flex flex-col gap-6 w-full">
     
-    <!-- Table 1: Store -->
-    <div class="bg-white rounded-xl shadow-sm border border-surface-100 p-5 flex flex-col" id="queue">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium text-surface-900">Store</h3>
-        <div class="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-md font-medium border border-blue-100">
-          {stats.globalQueueCount} Available
-        </div>
-      </div>
-      
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left whitespace-nowrap">
-          <thead class="text-[11px] uppercase tracking-wider text-surface-400 border-b border-surface-100">
-            <tr>
-              <th class="px-2 py-3 font-medium">Customer</th>
-              <th class="px-2 py-3 font-medium">Address</th>
-              <th class="px-2 py-3 font-medium">Type</th>
-              <th class="px-2 py-3 font-medium text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-surface-100/60">
-            {#each globalQueue as delivery}
-              <tr class="hover:bg-surface-50/50 transition-colors">
-                <td class="px-2 py-4 text-surface-600">
-                  <div class="font-medium text-surface-900">{delivery.order.customer.name}</div>
-                  <div class="text-xs text-surface-400">{new Date(delivery.createdAt).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}</div>
-                </td>
-                <td class="px-2 py-4 text-surface-500 truncate max-w-[150px]" title={delivery.type === 'PICKUP' ? delivery.order.pickupAddress?.fullAddress : delivery.order.deliveryAddress?.fullAddress}>
-                  {delivery.type === 'PICKUP' ? (delivery.order.pickupAddress?.fullAddress || '-') : (delivery.order.deliveryAddress?.fullAddress || '-')}
-                </td>
-                <td class="px-2 py-4">
-                  {#if delivery.type === 'PICKUP'}
-                    <span class="text-amber-600 bg-amber-50 border border-amber-100/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Pickup</span>
-                  {:else}
-                    <span class="text-blue-600 bg-blue-50 border border-blue-100/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Delivery</span>
-                  {/if}
-                </td>
-                <td class="px-2 py-4 text-right">
-                  <form method="POST" action="?/acceptTask" use:enhance>
-                    <input type="hidden" name="deliveryId" value={delivery.id} />
-                    <button type="submit" class="text-xs bg-surface-900 text-white font-medium hover:bg-surface-700 px-3 py-1.5 rounded-md transition-colors">
-                      Ambil &rarr;
-                    </button>
-                  </form>
-                </td>
-              </tr>
-            {/each}
-            {#if globalQueue.length === 0}
-              <tr>
-                <td colspan="4" class="px-2 py-8 text-center text-surface-400 text-xs">
-                  Tidak ada antrean baru.
-                </td>
-              </tr>
-            {/if}
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Table 2: Active Tasks -->
+    <!-- Table: Active Tasks -->
     <div class="bg-white rounded-xl shadow-sm border border-surface-100 p-5 flex flex-col" id="history">
       <div class="flex justify-between items-center mb-6">
         <h3 class="text-lg font-medium text-surface-900">In Conversation</h3>
