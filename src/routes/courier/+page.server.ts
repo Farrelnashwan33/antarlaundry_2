@@ -109,6 +109,24 @@ export const actions: Actions = {
     return { success: true };
   },
 
+  updateVehicle: async ({ request, locals }) => {
+    if (locals.user?.role !== 'COURIER') return fail(403);
+    const data = await request.formData();
+    const vehicleType = data.get('vehicleType') as string;
+
+    if (!['MOTOR', 'MOTOR_BOX', 'MOBIL'].includes(vehicleType)) {
+      return fail(400, { error: 'Invalid vehicle type' });
+    }
+
+    await prisma.courierProfile.upsert({
+      where: { userId: locals.user.id },
+      update: { vehicleType: vehicleType as any },
+      create: { userId: locals.user.id, vehicleType: vehicleType as any }
+    });
+
+    return { success: true };
+  },
+
   acceptTask: async ({ request, locals }) => {
     if (locals.user?.role !== 'COURIER') return fail(403);
     

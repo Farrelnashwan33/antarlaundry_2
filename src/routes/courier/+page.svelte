@@ -26,8 +26,19 @@
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
         GO LAUNDRY
       </div>
-      <h1 class="text-3xl font-black tracking-tight mb-1">Halo, Kurir 👋</h1>
-      <p class="text-blue-100 text-sm">Kendaraan: {profile?.vehicleType || 'Motor'} | Rating: ⭐ 4.9</p>
+      <h1 class="text-3xl font-black tracking-tight mb-2">Halo, Kurir 👋</h1>
+      <div class="flex items-center gap-3">
+        <form method="POST" action="?/updateVehicle" use:enhance class="flex items-center gap-2">
+          <label for="vehicleType" class="text-blue-100 text-sm font-medium">Kendaraan:</label>
+          <select id="vehicleType" name="vehicleType" onchange="this.form.submit()" class="bg-blue-700/50 text-white border border-blue-500/30 rounded-lg text-sm px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+            <option value="MOTOR" selected={profile?.vehicleType === 'MOTOR'}>Motor (🛵)</option>
+            <option value="MOTOR_BOX" selected={profile?.vehicleType === 'MOTOR_BOX'}>Motor Box (🛺)</option>
+            <option value="MOBIL" selected={profile?.vehicleType === 'MOBIL'}>Mobil (🚗)</option>
+          </select>
+        </form>
+        <span class="text-blue-100 text-sm opacity-50">|</span>
+        <span class="text-blue-100 text-sm">Rating: ⭐ 4.9</span>
+      </div>
     </div>
     
     <div class="relative z-10 flex flex-col items-end gap-3">
