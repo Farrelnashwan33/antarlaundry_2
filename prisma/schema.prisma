@@ -67,6 +67,10 @@ model User {
   orders        Order[]   @relation("CustomerOrders")
   deliveries    Delivery[] @relation("CourierDeliveries")
   
+  // Go Laundry Relations
+  goLaundryCustomerOrders GoLaundryOrder[] @relation("CustomerGoLaundry")
+  goLaundryCourierOrders  GoLaundryOrder[] @relation("CourierGoLaundry")
+  
   wallet        Wallet?
   topUps        TopUp[]
   
@@ -92,6 +96,7 @@ model CourierProfile {
   
   vehicleType String?
   plateNumber String?
+  isOnline    Boolean  @default(false)
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -342,3 +347,74 @@ model TopUp {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
+
+// -----------------------------------------------------------------
+// GO LAUNDRY MODULAR FEATURES
+// -----------------------------------------------------------------
+
+enum GoLaundryServiceType {
+  PICKUP_ONLY
+  DELIVERY_ONLY
+  PICKUP_AND_DELIVERY
+}
+
+enum GoLaundryVehicle {
+  MOTOR      // max 10kg
+  MOTOR_BOX  // max 20kg
+  MOBIL      // max 50kg
+}
+
+enum GoLaundryStatus {
+  AVAILABLE
+  CLAIMING
+  ASSIGNED
+  HEADING_TO_PICKUP
+  PICKED_UP
+  ON_DELIVERY
+  COMPLETED
+  CANCELLED
+}
+
+model GoLaundryOrder {
+  id                  String               @id @default(uuid())
+  orderNumber         String               @unique // e.g. GL-1028
+  
+  customerId          String
+  customer            User                 @relation("CustomerGoLaundry", fields: [customerId], references: [id])
+  
+  courierId           String?
+  courier             User?                @relation("CourierGoLaundry", fields: [courierId], references: [id])
+  
+  serviceType         GoLaundryServiceType
+  vehicleType         GoLaundryVehicle
+  
+  pickupAddress       String
+  destinationAddress  String
+  notes               String?
+  estimatedWeight     Float?
+  
+  status              GoLaundryStatus      @default(AVAILABLE)
+  
+  deliveryFee         Decimal
+  courierEarning      Decimal
+  platformFee         Decimal
+  
+  claims              GoLaundryClaim[]
+  
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  claimedAt           DateTime?
+}
+
+model GoLaundryClaim {
+  id              String         @id @default(uuid())
+  orderId         String
+  order           GoLaundryOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  courierId       String
+  
+  status          String         // e.g. "SUCCESS", "FAILED"
+  createdAt       DateTime       @default(now())
+  
+  @@unique([orderId, courierId])
+}
+

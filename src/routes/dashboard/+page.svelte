@@ -12,10 +12,10 @@
   };
 
   const menuCepat = [
+    { title: 'GO LAUNDRY', desc: 'Antar-Jemput Cepat', icon: 'M13 10V3L4 14h7v7l9-11h-7z', bg: 'bg-blue-600', text: 'text-white', link: '/dashboard/golaundry/new' },
     { title: 'Buat Pesanan', desc: 'Buat laundry baru', icon: 'M12 4v16m8-8H4', bg: 'bg-blue-50', text: 'text-blue-600', link: '/dashboard/order/new' },
     { title: 'Pesanan Saya', desc: 'Lihat semua pesanan', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', bg: 'bg-green-50', text: 'text-green-600', link: '/dashboard/orders' },
     { title: 'Promo & Voucher', desc: 'Dapatkan diskon', icon: 'M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z', bg: 'bg-orange-50', text: 'text-orange-500', link: '/dashboard/promo' },
-    { title: 'Bantuan', desc: 'Pusat bantuan', icon: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z', bg: 'bg-purple-50', text: 'text-purple-600', link: '/dashboard/support' },
   ];
 
   const getStepStatus = (order: any, step: string) => {

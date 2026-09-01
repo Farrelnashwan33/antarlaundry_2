@@ -9,6 +9,11 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw redirect(303, '/dashboard');
   }
 
+  // Load Courier Profile
+  const profile = await prisma.courierProfile.findUnique({
+    where: { userId: user.id }
+  });
+
   // Global Queue: Deliveries that are waiting for a courier (courierId is null)
   const globalQueue = await prisma.delivery.findMany({
     where: { courierId: null, status: 'ASSIGNED' },
@@ -82,11 +87,28 @@ export const load: PageServerLoad = async ({ locals }) => {
       globalQueueCount: globalQueue.length,
       activeCount: activeDeliveries.length,
       completedCount: totalCompleted
-    }
+    },
+    profile
   };
 };
 
 export const actions: Actions = {
+  toggleOnline: async ({ request, locals }) => {
+    if (locals.user?.role !== 'COURIER') return fail(403);
+    
+    const profile = await prisma.courierProfile.findUnique({
+      where: { userId: locals.user.id }
+    });
+    
+    if (profile) {
+      await prisma.courierProfile.update({
+        where: { id: profile.id },
+        data: { isOnline: !profile.isOnline }
+      });
+    }
+    return { success: true };
+  },
+
   acceptTask: async ({ request, locals }) => {
     if (locals.user?.role !== 'COURIER') return fail(403);
     

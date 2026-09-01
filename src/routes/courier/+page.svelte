@@ -7,24 +7,45 @@
   let globalQueue = $derived(data.globalQueue);
   let activeDeliveries = $derived(data.activeDeliveries);
   let stats = $derived(data.stats);
+  let profile = $derived(data.profile);
 
   const calcPct = (count: number) => stats.totalTasks > 0 ? Math.round((count / stats.totalTasks) * 100) : 0;
 </script>
 
 <svelte:head>
-  <title>Dashboard Kurir - High Clean Pro</title>
+  <title>Kurir Dashboard - GO LAUNDRY</title>
 </svelte:head>
 
 <div class="flex flex-col gap-6 w-full">
   
-  <!-- Breadcrumb and Title -->
-  <div class="flex flex-col gap-1">
-    <div class="flex items-center gap-2 text-[11px] text-surface-500 font-medium">
-      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-      <span>&rsaquo;</span>
-      <span>Courier</span>
+  <!-- Title & Profile -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-blue-600 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+    <div class="absolute -right-10 -top-10 text-9xl opacity-10">🛵</div>
+    <div class="relative z-10">
+      <div class="flex items-center gap-2 mb-2 text-blue-100 font-bold text-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        GO LAUNDRY
+      </div>
+      <h1 class="text-3xl font-black tracking-tight mb-1">Halo, Kurir 👋</h1>
+      <p class="text-blue-100 text-sm">Kendaraan: {profile?.vehicleType || 'Motor'} | Rating: ⭐ 4.9</p>
     </div>
-    <h1 class="text-3xl font-bold text-surface-900 tracking-tight">Home</h1>
+    
+    <div class="relative z-10 flex flex-col items-end gap-3">
+      <form method="POST" action="?/toggleOnline" use:enhance>
+        <button type="submit" class="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full backdrop-blur-sm transition-colors border border-white/20">
+          {#if profile?.isOnline}
+            <span class="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(74,222,128,0.5)]"></span>
+            <span class="font-bold text-sm text-white">ONLINE</span>
+          {:else}
+            <span class="w-3 h-3 bg-surface-400 rounded-full"></span>
+            <span class="font-bold text-sm text-surface-200">OFFLINE</span>
+          {/if}
+        </button>
+      </form>
+      <a href="/courier/golaundry/pool" class="text-sm bg-white text-blue-600 font-bold px-4 py-2 rounded-xl hover:bg-blue-50 transition-colors shadow-sm text-center w-full">
+        Cari Order Go Laundry &rarr;
+      </a>
+    </div>
   </div>
 
   <!-- 4 Minimal Stat Cards -->
