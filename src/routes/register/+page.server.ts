@@ -23,8 +23,9 @@ export const actions: Actions = {
       return fail(400, { error: 'Semua field harus diisi.' });
     }
     
-    if (password.length < 8) {
-      return fail(400, { error: 'Kata sandi harus minimal 8 karakter.' });
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return fail(400, { error: 'Kata sandi harus minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan karakter spesial (@$!%*?&).' });
     }
 
     try {
