@@ -26,12 +26,19 @@
   </div>
 
   {#if !profile?.isOnline}
-    <div class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl text-sm flex gap-3">
-      <div>⚠️</div>
-      <div>
-        <span class="font-bold">Anda sedang offline.</span> 
-        Sebaiknya ubah status Anda menjadi online di dashboard agar mendapatkan prioritas order yang lebih baik.
+    <div class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl text-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="flex gap-3">
+        <div>⚠️</div>
+        <div>
+          <span class="font-bold">Anda sedang offline.</span> 
+          Aktifkan status Anda untuk mulai menerima dan mengambil order Go Laundry.
+        </div>
       </div>
+      <form method="POST" action="?/toggleOnline" use:enhance>
+        <button type="submit" class="whitespace-nowrap px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg transition-colors">
+          Aktifkan Sekarang
+        </button>
+      </form>
     </div>
   {/if}
 

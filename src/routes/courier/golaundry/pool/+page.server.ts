@@ -37,6 +37,22 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
+  toggleOnline: async ({ request, locals }) => {
+    if (locals.user?.role !== 'COURIER') return fail(403);
+    
+    const profile = await prisma.courierProfile.findUnique({
+      where: { userId: locals.user.id }
+    });
+    
+    if (profile) {
+      await prisma.courierProfile.update({
+        where: { id: profile.id },
+        data: { isOnline: !profile.isOnline }
+      });
+    }
+    return { success: true };
+  },
+
   claimOrder: async ({ request, locals }) => {
     const user = locals.user;
     if (!user || user.role !== 'COURIER') return fail(403);
