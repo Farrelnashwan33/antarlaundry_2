@@ -66,7 +66,7 @@
       <div class="text-3xl font-bold text-surface-900">{stats.totalTasks}</div>
     </div>
     <div class="bg-white p-5 rounded-xl shadow-sm border border-surface-100 flex flex-col gap-2">
-      <div class="text-sm text-surface-500">Global Queue</div>
+      <div class="text-sm text-surface-500">Store</div>
       <div class="text-3xl font-bold text-surface-900">{stats.globalQueueCount}</div>
     </div>
     <div class="bg-white p-5 rounded-xl shadow-sm border border-surface-100 flex flex-col gap-2">
@@ -82,10 +82,10 @@
   <!-- Tables Section -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     
-    <!-- Table 1: Global Queue -->
+    <!-- Table 1: Store -->
     <div class="bg-white rounded-xl shadow-sm border border-surface-100 p-5 flex flex-col" id="queue">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium text-surface-900">Global Queue</h3>
+        <h3 class="text-lg font-medium text-surface-900">Store</h3>
         <div class="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-md font-medium border border-blue-100">
           {stats.globalQueueCount} Available
         </div>
