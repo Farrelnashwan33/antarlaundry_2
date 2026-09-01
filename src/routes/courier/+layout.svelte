@@ -32,8 +32,8 @@
 
 <div class="flex flex-col h-screen w-full overflow-hidden bg-[#f4f7f6] font-sans text-surface-900">
   
-  <!-- Top Navigation Bar (Dark) -->
-  <header class="h-14 bg-[#0f172a] text-white flex items-center justify-between px-6 shrink-0 z-30">
+  <!-- Top Navigation Bar (Dark) - Hidden on Mobile -->
+  <header class="hidden md:flex h-14 bg-[#0f172a] text-white items-center justify-between px-6 shrink-0 z-30">
     <div class="flex items-center gap-2">
       <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-sm">
         A
@@ -58,9 +58,6 @@
       <a href="/courier" class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-xs hover:bg-blue-500/30 transition-colors" title="My Profile" aria-label="Profile">
         CR
       </a>
-      <button onclick={() => isMobileMenuOpen = !isMobileMenuOpen} class="md:hidden p-1 text-slate-400" aria-label="Toggle menu">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path></svg>
-      </button>
     </div>
   </header>
 
@@ -114,51 +111,29 @@
       </div>
     </aside>
 
-    <!-- Mobile Menu -->
-    {#if isMobileMenuOpen}
-      <div class="md:hidden absolute inset-0 bg-white z-40 flex flex-col pt-4">
-        <nav class="flex-1 px-4 flex flex-col gap-1 overflow-y-auto">
-          {#each navItems as item}
-            <a 
-              href={item.path} 
-              onclick={(e) => {
-                isMobileMenuOpen = false;
-                if (item.path.includes('#') && $page.url.pathname === '/courier') {
-                  const id = item.path.split('#')[1];
-                  const el = document.getElementById(id);
-                  if (el) {
-                    e.preventDefault();
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    window.history.pushState(null, '', item.path);
-                  }
-                }
-              }}
-              class="flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium { $page.url.pathname === item.path ? 'bg-blue-50 text-blue-700' : 'text-surface-600' }"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon}></path>
-              </svg>
-              {item.name}
-            </a>
-          {/each}
-        </nav>
-        <div class="p-4 border-t border-surface-100">
-          <form action="/logout" method="POST">
-            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-base font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-              Logout
-            </button>
-          </form>
-        </div>
-      </div>
-    {/if}
-
     <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto bg-[#f4f7f6] min-w-0">
+    <main class="flex-1 overflow-y-auto bg-[#f4f7f6] min-w-0 pb-20 md:pb-0">
       <div class="p-6 md:p-8 max-w-[1600px] mx-auto w-full overflow-x-hidden">
         {@render children()}
       </div>
     </main>
     
+    <!-- Mobile Bottom Navigation -->
+    <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-surface-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-40 flex justify-around items-center px-2 py-2">
+      {#each navItems as item}
+        <a 
+          href={item.path} 
+          class="flex flex-col items-center justify-center w-16 h-12 gap-1 rounded-xl transition-colors
+            { $page.url.pathname === item.path ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700' }"
+        >
+          <div class="{$page.url.pathname === item.path ? 'bg-blue-100 p-1.5 rounded-lg' : 'p-1.5'}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{$page.url.pathname === item.path ? '2.5' : '2'}" d={item.icon}></path>
+            </svg>
+          </div>
+          <span class="text-[10px] font-medium leading-none">{item.name}</span>
+        </a>
+      {/each}
+    </nav>
   </div>
 </div>

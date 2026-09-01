@@ -22,47 +22,7 @@
 
 <div class="flex flex-col md:flex-row h-screen bg-surface-50 font-sans overflow-hidden w-full relative">
   
-  <!-- Mobile Header -->
-  <header class="md:hidden bg-white border-b border-surface-200 p-4 flex items-center justify-between shrink-0 z-30">
-    <div class="flex items-center gap-2">
-      <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold shadow-sm">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      </div>
-      <span class="font-bold text-blue-700">AntarLaundry</span>
-    </div>
-    <button onclick={() => isMobileMenuOpen = !isMobileMenuOpen} class="p-2 text-surface-600">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path></svg>
-    </button>
-  </header>
-
-  <!-- Mobile Menu -->
-  {#if isMobileMenuOpen}
-    <div class="md:hidden absolute top-[73px] inset-x-0 bottom-0 bg-white z-40 flex flex-col">
-      <nav class="flex-1 overflow-y-auto p-4 space-y-1">
-        {#each navLinks as link}
-          <a 
-            href={link.href} 
-            onclick={() => isMobileMenuOpen = false}
-            class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm
-              {$page.url.pathname === link.href ? 'bg-blue-50 text-blue-700' : 'text-surface-600'}"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={link.icon}></path>
-            </svg>
-            {link.label}
-          </a>
-        {/each}
-      </nav>
-      <div class="p-4 border-t border-surface-100">
-        <form method="POST" action="/logout">
-          <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-600 bg-red-50">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-            Keluar
-          </button>
-        </form>
-      </div>
-    </div>
-  {/if}
+  <!-- Mobile Menu & Header have been replaced by Bottom Navigation -->
   
   <!-- Sidebar (Desktop) -->
   <aside class="w-72 bg-white border-r border-surface-200 flex-col justify-between hidden md:flex shrink-0">
@@ -121,7 +81,45 @@
   </aside>
 
   <!-- Main Content Area -->
-  <main class="flex-1 h-full overflow-y-auto">
+  <main class="flex-1 h-full overflow-y-auto pb-20 md:pb-0">
     {@render children()}
   </main>
+  
+  <!-- Mobile Bottom Navigation -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-surface-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-40 flex justify-around items-center px-1 py-2">
+    <a href="/dashboard" class="flex flex-col items-center justify-center w-[20%] h-12 gap-1 rounded-xl transition-colors {$page.url.pathname === '/dashboard' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+      <div class="{$page.url.pathname === '/dashboard' ? 'bg-blue-100 p-1 rounded-lg' : 'p-1'}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="{$page.url.pathname === '/dashboard' ? '2.5' : '2'}" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+      </div>
+      <span class="text-[10px] font-medium leading-none">Beranda</span>
+    </a>
+    
+    <a href="/dashboard/orders" class="flex flex-col items-center justify-center w-[20%] h-12 gap-1 rounded-xl transition-colors {$page.url.pathname === '/dashboard/orders' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+      <div class="{$page.url.pathname === '/dashboard/orders' ? 'bg-blue-100 p-1 rounded-lg' : 'p-1'}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="{$page.url.pathname === '/dashboard/orders' ? '2.5' : '2'}" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+      </div>
+      <span class="text-[10px] font-medium leading-none">Pesanan</span>
+    </a>
+
+    <a href="/dashboard/order/new" class="flex flex-col items-center justify-center w-[20%] h-12 gap-1 rounded-xl transition-colors {$page.url.pathname === '/dashboard/order/new' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'} -mt-4">
+      <div class="bg-blue-600 text-white p-3 rounded-full shadow-lg border-4 border-surface-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+      </div>
+      <span class="text-[10px] font-medium leading-none mt-1">Pesan</span>
+    </a>
+
+    <a href="/dashboard/wallet" class="flex flex-col items-center justify-center w-[20%] h-12 gap-1 rounded-xl transition-colors {$page.url.pathname === '/dashboard/wallet' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+      <div class="{$page.url.pathname === '/dashboard/wallet' ? 'bg-blue-100 p-1 rounded-lg' : 'p-1'}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="{$page.url.pathname === '/dashboard/wallet' ? '2.5' : '2'}" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+      </div>
+      <span class="text-[10px] font-medium leading-none">Dompet</span>
+    </a>
+
+    <a href="/dashboard/settings" class="flex flex-col items-center justify-center w-[20%] h-12 gap-1 rounded-xl transition-colors {$page.url.pathname.includes('/dashboard/settings') ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+      <div class="{$page.url.pathname.includes('/dashboard/settings') ? 'bg-blue-100 p-1 rounded-lg' : 'p-1'}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="{$page.url.pathname.includes('/dashboard/settings') ? '2.5' : '2'}" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      </div>
+      <span class="text-[10px] font-medium leading-none">Akun</span>
+    </a>
+  </nav>
 </div>
