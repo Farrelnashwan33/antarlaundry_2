@@ -426,11 +426,11 @@
 				{:else}
 					{#each activeOrders as order}
 						<div
-							class="mb-4 flex items-center justify-between rounded-2xl border border-surface-100 bg-surface-50 p-4 transition-colors last:mb-0 hover:border-surface-200 hover:bg-white"
+							class="mb-4 flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-2xl border border-surface-100 bg-surface-50 p-4 transition-colors last:mb-0 hover:border-surface-200 hover:bg-white"
 						>
 							<div class="flex items-center gap-5">
 								<div
-									class="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-blue-600"
+									class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600"
 								>
 									<svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
 										><path
@@ -441,30 +441,30 @@
 										></path></svg
 									>
 								</div>
-								<div>
+								<div class="min-w-0">
 									<div class="mb-1 flex items-center gap-3">
 										<span class="font-mono text-xs text-surface-400"
 											>#{order.orderNumber.split('-')[1]}</span
 										>
 										<span
-											class="rounded-md bg-blue-100 px-2 py-0.5 text-[10px] font-bold tracking-wider text-blue-700 uppercase"
+											class="rounded-md bg-blue-100 px-2 py-0.5 text-[10px] font-bold tracking-wider text-blue-700 uppercase whitespace-nowrap"
 											>{order.orderStatus}</span
 										>
 									</div>
-									<h3 class="text-lg font-bold text-surface-900">
+									<h3 class="truncate text-lg font-bold text-surface-900">
 										{order.items[0]?.service?.name || 'Laundry Kiloan'}
 									</h3>
-									<p class="mt-1 text-sm text-surface-500">
+									<p class="mt-1 truncate text-sm text-surface-500">
 										{new Date(order.createdAt).toLocaleDateString('id-ID')} &bull; {order.items[0]
 											?.weight || 0} Kg &bull; Reguler
 									</p>
 								</div>
 							</div>
-							<div class="flex flex-col items-end gap-2 text-right">
+							<div class="flex flex-col items-start md:items-end gap-3 text-left md:text-right w-full md:w-auto mt-2 md:mt-0 pt-4 md:pt-0 border-t md:border-0 border-surface-200">
 								<span class="text-xl font-extrabold text-blue-600"
 									>{formatCurrency(order.total || order.subtotal || 0)}</span
 								>
-								<div class="flex gap-2">
+								<div class="flex flex-wrap gap-2 w-full md:w-auto">
 									{#if order.orderStatus === 'PENDING'}
 										<form method="POST" action="/dashboard/orders?/cancelOrder">
 											<input type="hidden" name="orderId" value={order.id} />
