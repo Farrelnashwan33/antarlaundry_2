@@ -220,7 +220,7 @@
 			{#each navItems as item}
 				<a
 					href={item.path}
-					class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors
+					class="flex flex-1 flex-col items-center justify-center gap-1.5 transition-colors
             {$page.url.pathname === item.path
 						? 'text-blue-600'
 						: 'text-surface-500 hover:text-surface-700'}"

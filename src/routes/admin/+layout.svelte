@@ -306,31 +306,31 @@
 		<!-- Mobile Bottom Navigation -->
 		<nav class="fixed inset-x-0 bottom-0 z-50 flex items-center justify-around border-t border-surface-200 bg-white px-2 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] md:hidden">
 			<!-- Beranda -->
-			<a href="/admin" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<a href="/admin" class="flex flex-1 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
 				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/admin' ? '2.5' : '2'} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
 				<span class="text-[11px] leading-none font-medium">Beranda</span>
 			</a>
 
 			<!-- Orders -->
-			<a href="/admin/orders" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin/orders' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<a href="/admin/orders" class="flex flex-1 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin/orders' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
 				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/admin/orders' ? '2.5' : '2'} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
 				<span class="text-[11px] leading-none font-medium">Orders</span>
 			</a>
 
 			<!-- New -->
-			<a href="/admin/orders/new" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin/orders/new' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<a href="/admin/orders/new" class="flex flex-1 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin/orders/new' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
 				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/admin/orders/new' ? '2.5' : '2'} d="M12 4v16m8-8H4"></path></svg>
 				<span class="text-[11px] leading-none font-medium">New</span>
 			</a>
 
 			<!-- Go Laundry -->
-			<a href="/admin/golaundry/orders" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin/golaundry/orders' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<a href="/admin/golaundry/orders" class="flex flex-1 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin/golaundry/orders' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
 				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/admin/golaundry/orders' ? '2.5' : '2'} d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
 				<span class="text-[11px] leading-none font-medium">Go Laundry</span>
 			</a>
 
 			<!-- Customers -->
-			<a href="/admin/customers" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin/customers' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<a href="/admin/customers" class="flex flex-1 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/admin/customers' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
 				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/admin/customers' ? '2.5' : '2'} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
 				<span class="text-[11px] leading-none font-medium">Customers</span>
 			</a>
