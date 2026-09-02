@@ -3,13 +3,13 @@ import { writable } from 'svelte/store';
 export const isChatOpen = writable(false);
 
 export function toggleChat() {
-  isChatOpen.update(v => !v);
+	isChatOpen.update((v) => !v);
 }
 
 export function openChat() {
-  isChatOpen.set(true);
+	isChatOpen.set(true);
 }
 
 export function closeChat() {
-  isChatOpen.set(false);
+	isChatOpen.set(false);
 }

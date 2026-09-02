@@ -3,35 +3,35 @@ import type { PageServerLoad } from './$types';
 import prisma from '$lib/server/prisma';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const user = locals.user;
-  
-  if (!user || user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
-    throw redirect(303, '/dashboard');
-  }
+	const user = locals.user;
 
-  const transactions = await prisma.order.findMany({
-    where: {
-      orderStatus: 'COMPLETED'
-    },
-    include: {
-      customer: true,
-      items: { include: { service: true } }
-    },
-    orderBy: { createdAt: 'desc' }
-  });
+	if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+		throw redirect(303, '/dashboard');
+	}
 
-  const serializedTransactions = transactions.map(order => ({
-    ...order,
-    total: order.total ? Number(order.total) : null,
-    items: order.items.map(item => ({
-      ...item,
-      price: Number(item.price),
-      subtotal: Number(item.subtotal),
-      weight: Number(item.weight)
-    }))
-  }));
+	const transactions = await prisma.order.findMany({
+		where: {
+			orderStatus: 'COMPLETED'
+		},
+		include: {
+			customer: true,
+			items: { include: { service: true } }
+		},
+		orderBy: { createdAt: 'desc' }
+	});
 
-  return {
-    transactions: serializedTransactions
-  };
+	const serializedTransactions = transactions.map((order) => ({
+		...order,
+		total: order.total ? Number(order.total) : null,
+		items: order.items.map((item) => ({
+			...item,
+			price: Number(item.price),
+			subtotal: Number(item.subtotal),
+			weight: Number(item.weight)
+		}))
+	}));
+
+	return {
+		transactions: serializedTransactions
+	};
 };

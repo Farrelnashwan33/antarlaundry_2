@@ -3,42 +3,44 @@ import type { PageServerLoad } from './$types';
 import prisma from '$lib/server/prisma';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const user = locals.user;
-  
-  if (!user || user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
-    throw redirect(303, '/dashboard');
-  }
+	const user = locals.user;
 
-  const allOrders = await prisma.order.findMany({
-    include: {
-      customer: true,
-      items: { include: { service: true } },
-      deliveries: { include: { courier: true } }
-    },
-    orderBy: { createdAt: 'desc' }
-  });
+	if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+		throw redirect(303, '/dashboard');
+	}
 
-  // Serialize orders to handle Decimal objects from Prisma
-  const serializedOrders = allOrders.map(order => ({
-    ...order,
-    subtotal: order.subtotal ? Number(order.subtotal) : null,
-    deliveryFee: order.deliveryFee ? Number(order.deliveryFee) : null,
-    discount: order.discount ? Number(order.discount) : null,
-    total: order.total ? Number(order.total) : null,
-    items: order.items.map(item => ({
-      ...item,
-      price: Number(item.price),
-      subtotal: Number(item.subtotal),
-      weight: Number(item.weight),
-      service: item.service ? {
-        ...item.service,
-        pricePerKg: Number(item.service.pricePerKg),
-        minPrice: item.service.minPrice ? Number(item.service.minPrice) : null
-      } : null
-    }))
-  }));
+	const allOrders = await prisma.order.findMany({
+		include: {
+			customer: true,
+			items: { include: { service: true } },
+			deliveries: { include: { courier: true } }
+		},
+		orderBy: { createdAt: 'desc' }
+	});
 
-  return {
-    orders: serializedOrders
-  };
+	// Serialize orders to handle Decimal objects from Prisma
+	const serializedOrders = allOrders.map((order) => ({
+		...order,
+		subtotal: order.subtotal ? Number(order.subtotal) : null,
+		deliveryFee: order.deliveryFee ? Number(order.deliveryFee) : null,
+		discount: order.discount ? Number(order.discount) : null,
+		total: order.total ? Number(order.total) : null,
+		items: order.items.map((item) => ({
+			...item,
+			price: Number(item.price),
+			subtotal: Number(item.subtotal),
+			weight: Number(item.weight),
+			service: item.service
+				? {
+						...item.service,
+						pricePerKg: Number(item.service.pricePerKg),
+						minPrice: item.service.minPrice ? Number(item.service.minPrice) : null
+					}
+				: null
+		}))
+	}));
+
+	return {
+		orders: serializedOrders
+	};
 };

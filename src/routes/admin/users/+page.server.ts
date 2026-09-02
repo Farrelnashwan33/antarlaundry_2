@@ -3,178 +3,181 @@ import type { Actions, PageServerLoad } from './$types';
 import prisma from '$lib/server/prisma';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const user = locals.user;
-  
-  if (!user || user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
-    throw redirect(303, '/dashboard');
-  }
+	const user = locals.user;
 
-  const staffUsers = await prisma.user.findMany({
-    include: {
-      courierProfile: true
-    },
-    orderBy: { createdAt: 'desc' }
-  });
+	if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+		throw redirect(303, '/dashboard');
+	}
 
-  return {
-    staffUsers
-  };
+	const staffUsers = await prisma.user.findMany({
+		include: {
+			courierProfile: true
+		},
+		orderBy: { createdAt: 'desc' }
+	});
+
+	return {
+		staffUsers
+	};
 };
 
 export const actions: Actions = {
-  changeRole: async ({ request, locals }) => {
-    if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
-    
-    const data = await request.formData();
-    const userId = data.get('userId') as string;
-    const role = data.get('role') as string;
+	changeRole: async ({ request, locals }) => {
+		if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
 
-    if (!userId || !role) return fail(400);
+		const data = await request.formData();
+		const userId = data.get('userId') as string;
+		const role = data.get('role') as string;
 
-    // Validate role enum
-    if (!['ADMIN', 'COURIER', 'STAFF', 'CUSTOMER'].includes(role)) {
-      return fail(400, { error: 'Invalid role' });
-    }
+		if (!userId || !role) return fail(400);
 
-    await prisma.user.update({
-      where: { id: userId },
-      data: { role: role as any }
-    });
+		// Validate role enum
+		if (!['ADMIN', 'COURIER', 'STAFF', 'CUSTOMER'].includes(role)) {
+			return fail(400, { error: 'Invalid role' });
+		}
 
-    return { success: true };
-  },
+		await prisma.user.update({
+			where: { id: userId },
+			data: { role: role as any }
+		});
 
-  addStaff: async ({ request, locals }) => {
-    if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
-    
-    const data = await request.formData();
-    const name = data.get('name') as string;
-    const email = data.get('email') as string;
-    const phone = data.get('phone') as string;
-    const password = data.get('password') as string;
-    const role = data.get('role') as string;
+		return { success: true };
+	},
 
-    if (!name || !email || !password || !role) {
-      return fail(400, { error: 'Missing required fields' });
-    }
+	addStaff: async ({ request, locals }) => {
+		if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
 
-    if (!['ADMIN', 'COURIER', 'STAFF'].includes(role)) {
-      return fail(400, { error: 'Invalid role' });
-    }
+		const data = await request.formData();
+		const name = data.get('name') as string;
+		const email = data.get('email') as string;
+		const phone = data.get('phone') as string;
+		const password = data.get('password') as string;
+		const role = data.get('role') as string;
 
-    // Check if email already exists
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      return fail(400, { error: 'Email already exists' });
-    }
+		if (!name || !email || !password || !role) {
+			return fail(400, { error: 'Missing required fields' });
+		}
 
-    // Hash the password inline or import auth.ts (inline is safer since I don't want to break imports)
-    const bcrypt = await import('bcryptjs');
-    const hashedPassword = await bcrypt.default.hash(password, 10);
+		if (!['ADMIN', 'COURIER', 'STAFF'].includes(role)) {
+			return fail(400, { error: 'Invalid role' });
+		}
 
-    const newUser = await prisma.user.create({
-      data: {
-        name,
-        email,
-        phone: phone || null,
-        passwordHash: hashedPassword,
-        role: role as any
-      }
-    });
+		// Check if email already exists
+		const existingUser = await prisma.user.findUnique({ where: { email } });
+		if (existingUser) {
+			return fail(400, { error: 'Email already exists' });
+		}
 
-    if (role === 'COURIER') {
-      await prisma.courierProfile.create({
-        data: {
-          userId: newUser.id,
-          vehicleType: 'Motorcycle',
-          status: 'AVAILABLE'
-        }
-      });
-    }
+		// Hash the password inline or import auth.ts (inline is safer since I don't want to break imports)
+		const bcrypt = await import('bcryptjs');
+		const hashedPassword = await bcrypt.default.hash(password, 10);
 
-    return { success: true };
-  },
+		const newUser = await prisma.user.create({
+			data: {
+				name,
+				email,
+				phone: phone || null,
+				passwordHash: hashedPassword,
+				role: role as any
+			}
+		});
 
-  updateStaff: async ({ request, locals }) => {
-    if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
-    
-    const data = await request.formData();
-    const userId = data.get('userId') as string;
-    const name = data.get('name') as string;
-    const email = data.get('email') as string;
-    const phone = data.get('phone') as string;
-    const role = data.get('role') as string;
-    const password = data.get('password') as string;
+		if (role === 'COURIER') {
+			await prisma.courierProfile.create({
+				data: {
+					userId: newUser.id,
+					vehicleType: 'Motorcycle',
+					status: 'AVAILABLE'
+				}
+			});
+		}
 
-    if (!userId || !name || !email || !role) {
-      return fail(400, { error: 'Missing required fields' });
-    }
+		return { success: true };
+	},
 
-    if (!['ADMIN', 'COURIER', 'STAFF', 'CUSTOMER'].includes(role)) {
-      return fail(400, { error: 'Invalid role' });
-    }
+	updateStaff: async ({ request, locals }) => {
+		if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
 
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) return fail(404, { error: 'User not found' });
+		const data = await request.formData();
+		const userId = data.get('userId') as string;
+		const name = data.get('name') as string;
+		const email = data.get('email') as string;
+		const phone = data.get('phone') as string;
+		const role = data.get('role') as string;
+		const password = data.get('password') as string;
 
-    let updateData: any = {
-      name,
-      email,
-      phone: phone || null,
-      role: role as any
-    };
+		if (!userId || !name || !email || !role) {
+			return fail(400, { error: 'Missing required fields' });
+		}
 
-    if (password && password.trim() !== '') {
-      const bcrypt = await import('bcryptjs');
-      updateData.passwordHash = await bcrypt.default.hash(password.trim(), 10);
-    }
+		if (!['ADMIN', 'COURIER', 'STAFF', 'CUSTOMER'].includes(role)) {
+			return fail(400, { error: 'Invalid role' });
+		}
 
-    await prisma.user.update({
-      where: { id: userId },
-      data: updateData
-    });
+		const user = await prisma.user.findUnique({ where: { id: userId } });
+		if (!user) return fail(404, { error: 'User not found' });
 
-    if (role === 'COURIER' && user.role !== 'COURIER') {
-      // Create courier profile if they are becoming a courier
-      const existingProfile = await prisma.courierProfile.findUnique({ where: { userId } });
-      if (!existingProfile) {
-        await prisma.courierProfile.create({
-          data: {
-            userId: userId,
-            vehicleType: 'Motorcycle',
-            status: 'AVAILABLE'
-          }
-        });
-      }
-    }
+		let updateData: any = {
+			name,
+			email,
+			phone: phone || null,
+			role: role as any
+		};
 
-    return { success: true };
-  },
+		if (password && password.trim() !== '') {
+			const bcrypt = await import('bcryptjs');
+			updateData.passwordHash = await bcrypt.default.hash(password.trim(), 10);
+		}
 
-  deleteStaff: async ({ request, locals }) => {
-    if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
-    
-    const data = await request.formData();
-    const userId = data.get('userId') as string;
+		await prisma.user.update({
+			where: { id: userId },
+			data: updateData
+		});
 
-    if (!userId) return fail(400, { error: 'Missing user ID' });
+		if (role === 'COURIER' && user.role !== 'COURIER') {
+			// Create courier profile if they are becoming a courier
+			const existingProfile = await prisma.courierProfile.findUnique({ where: { userId } });
+			if (!existingProfile) {
+				await prisma.courierProfile.create({
+					data: {
+						userId: userId,
+						vehicleType: 'Motorcycle',
+						status: 'AVAILABLE'
+					}
+				});
+			}
+		}
 
-    // Prevent deleting oneself
-    if (userId === locals.user.id) {
-      return fail(400, { error: 'Cannot delete yourself' });
-    }
+		return { success: true };
+	},
 
-    try {
-      await prisma.user.delete({
-        where: { id: userId }
-      });
-    } catch (err: any) {
-      if (err.code === 'P2003') {
-        return fail(400, { error: 'Pengguna ini tidak dapat dihapus karena masih memiliki data pesanan atau transaksi.' });
-      }
-      return fail(500, { error: 'Terjadi kesalahan saat menghapus pengguna.' });
-    }
+	deleteStaff: async ({ request, locals }) => {
+		if (locals.user?.role !== 'ADMIN' && locals.user?.role !== 'SUPER_ADMIN') return fail(403);
 
-    return { success: true };
-  }
+		const data = await request.formData();
+		const userId = data.get('userId') as string;
+
+		if (!userId) return fail(400, { error: 'Missing user ID' });
+
+		// Prevent deleting oneself
+		if (userId === locals.user.id) {
+			return fail(400, { error: 'Cannot delete yourself' });
+		}
+
+		try {
+			await prisma.user.delete({
+				where: { id: userId }
+			});
+		} catch (err: any) {
+			if (err.code === 'P2003') {
+				return fail(400, {
+					error:
+						'Pengguna ini tidak dapat dihapus karena masih memiliki data pesanan atau transaksi.'
+				});
+			}
+			return fail(500, { error: 'Terjadi kesalahan saat menghapus pengguna.' });
+		}
+
+		return { success: true };
+	}
 };

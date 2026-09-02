@@ -4,67 +4,71 @@ import prisma from '$lib/server/prisma';
 import { hashPassword, createSession } from '$lib/server/auth';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  if (locals.user) {
-    throw redirect(302, '/dashboard');
-  }
+	if (locals.user) {
+		throw redirect(302, '/dashboard');
+	}
 };
 
 export const actions: Actions = {
-  default: async ({ request, cookies }) => {
-    const data = await request.formData();
-    
-    const name = data.get('name') as string;
-    const email = data.get('email') as string;
-    const phone = data.get('phone') as string;
-    const password = data.get('password') as string;
-    const role = (data.get('role') as string) || 'CUSTOMER'; // Allow registering as CUSTOMER or COURIER for demo
+	default: async ({ request, cookies }) => {
+		const data = await request.formData();
 
-    if (!name || !email || !password || !phone) {
-      return fail(400, { error: 'Semua field harus diisi.' });
-    }
-    
-    if (password.length < 6) {
-      return fail(400, { error: 'Kata sandi harus minimal 6 karakter.' });
-    }
+		const name = data.get('name') as string;
+		const email = data.get('email') as string;
+		const phone = data.get('phone') as string;
+		const password = data.get('password') as string;
+		const role = 'CUSTOMER'; // Force CUSTOMER role for public registration
 
-    try {
-      // Check if email already exists
-      const existingUser = await prisma.user.findUnique({ where: { email } });
-      if (existingUser) {
-        return fail(400, { error: 'Email sudah terdaftar.' });
-      }
+		if (!name || !email || !password || !phone) {
+			return fail(400, { error: 'Semua field harus diisi.' });
+		}
 
-      const hashedPassword = await hashPassword(password);
+		if (password.length < 6) {
+			return fail(400, { error: 'Kata sandi harus minimal 6 karakter.' });
+		}
 
-      const user = await prisma.user.create({
-        data: {
-          name,
-          email,
-          phone,
-          passwordHash: hashedPassword,
-          role: role === 'COURIER' ? 'COURIER' : 'CUSTOMER',
-          ...(role === 'CUSTOMER' ? {
-            customerProfile: {
-              create: {}
-            }
-          } : {}),
-          ...(role === 'COURIER' ? {
-            courierProfile: {
-              create: {
-                plateNumber: 'Belum diisi',
-                vehicleType: 'MOTOR'
-              }
-            }
-          } : {})
-        }
-      });
-      // Redirect to login page
-    } catch (err: any) {
-      console.error("Register Error:", err);
-      // Jangan pernah mengekspos raw error Prisma ke client di production
-      return fail(500, { error: 'Terjadi kesalahan pada server. Silakan coba lagi.' });
-    }
+		try {
+			// Check if email already exists
+			const existingUser = await prisma.user.findUnique({ where: { email } });
+			if (existingUser) {
+				return fail(400, { error: 'Email sudah terdaftar.' });
+			}
 
-    throw redirect(303, '/login?success=register');
-  }
+			const hashedPassword = await hashPassword(password);
+
+			const user = await prisma.user.create({
+				data: {
+					name,
+					email,
+					phone,
+					passwordHash: hashedPassword,
+					role: role === 'COURIER' ? 'COURIER' : 'CUSTOMER',
+					...(role === 'CUSTOMER'
+						? {
+								customerProfile: {
+									create: {}
+								}
+							}
+						: {}),
+					...(role === 'COURIER'
+						? {
+								courierProfile: {
+									create: {
+										plateNumber: 'Belum diisi',
+										vehicleType: 'MOTOR'
+									}
+								}
+							}
+						: {})
+				}
+			});
+			// Redirect to login page
+		} catch (err: any) {
+			console.error('Register Error:', err);
+			// Jangan pernah mengekspos raw error Prisma ke client di production
+			return fail(500, { error: 'Terjadi kesalahan pada server. Silakan coba lagi.' });
+		}
+
+		throw redirect(303, '/login?success=register');
+	}
 };
