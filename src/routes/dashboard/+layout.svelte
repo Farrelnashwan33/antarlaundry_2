@@ -167,116 +167,35 @@
 	</main>
 
 	<!-- Mobile Bottom Navigation -->
-	<nav
-		class="fixed inset-x-4 bottom-6 z-40 flex items-center justify-around rounded-3xl bg-white/95 backdrop-blur-md px-1 py-2 shadow-xl shadow-blue-900/10 md:hidden border border-surface-100"
-	>
-		<a
-			href="/dashboard"
-			class="flex h-12 w-[20%] flex-col items-center justify-center gap-1 rounded-xl transition-colors {$page
-				.url.pathname === '/dashboard'
-				? 'text-blue-600'
-				: 'text-surface-500 hover:text-surface-700'}"
-		>
-			<div class={$page.url.pathname === '/dashboard' ? 'rounded-lg bg-blue-100 p-1' : 'p-1'}>
-				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-					><path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width={$page.url.pathname === '/dashboard' ? '2.5' : '2'}
-						d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-					></path></svg
-				>
-			</div>
-			<span class="text-[10px] leading-none font-medium">Beranda</span>
+	<nav class="fixed inset-x-0 bottom-0 z-50 flex items-center justify-around border-t border-surface-200 bg-white px-2 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] md:hidden">
+		<!-- Beranda -->
+		<a href="/dashboard" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/dashboard' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/dashboard' ? '2.5' : '2'} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+			<span class="text-[11px] leading-none font-medium">Beranda</span>
 		</a>
 
-		<a
-			href="/dashboard/orders"
-			class="flex h-12 w-[20%] flex-col items-center justify-center gap-1 rounded-xl transition-colors {$page
-				.url.pathname === '/dashboard/orders'
-				? 'text-blue-600'
-				: 'text-surface-500 hover:text-surface-700'}"
-		>
-			<div
-				class={$page.url.pathname === '/dashboard/orders' ? 'rounded-lg bg-blue-100 p-1' : 'p-1'}
-			>
-				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-					><path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width={$page.url.pathname === '/dashboard/orders' ? '2.5' : '2'}
-						d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-					></path></svg
-				>
-			</div>
-			<span class="text-[10px] leading-none font-medium">Pesanan</span>
+		<!-- Pesanan -->
+		<a href="/dashboard/orders" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/dashboard/orders' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/dashboard/orders' ? '2.5' : '2'} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+			<span class="text-[11px] leading-none font-medium">Pesanan</span>
 		</a>
 
-		<a
-			href="/dashboard/order/new"
-			class="flex h-12 w-[20%] flex-col items-center justify-center gap-1 rounded-xl transition-colors {$page
-				.url.pathname === '/dashboard/order/new'
-				? 'text-blue-600'
-				: 'text-surface-500 hover:text-surface-700'} -mt-4"
-		>
-			<div class="rounded-full border-4 border-surface-50 bg-blue-600 p-3 text-white shadow-lg">
-				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-					><path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2.5"
-						d="M12 4v16m8-8H4"
-					></path></svg
-				>
-			</div>
-			<span class="mt-1 text-[10px] leading-none font-medium">Pesan</span>
+		<!-- Pesan (New Order) -->
+		<a href="/dashboard/order/new" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/dashboard/order/new' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/dashboard/order/new' ? '2.5' : '2'} d="M12 4v16m8-8H4"></path></svg>
+			<span class="text-[11px] leading-none font-medium">Pesan</span>
 		</a>
 
-		<a
-			href="/dashboard/wallet"
-			class="flex h-12 w-[20%] flex-col items-center justify-center gap-1 rounded-xl transition-colors {$page
-				.url.pathname === '/dashboard/wallet'
-				? 'text-blue-600'
-				: 'text-surface-500 hover:text-surface-700'}"
-		>
-			<div
-				class={$page.url.pathname === '/dashboard/wallet' ? 'rounded-lg bg-blue-100 p-1' : 'p-1'}
-			>
-				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-					><path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width={$page.url.pathname === '/dashboard/wallet' ? '2.5' : '2'}
-						d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-					></path></svg
-				>
-			</div>
-			<span class="text-[10px] leading-none font-medium">Dompet</span>
+		<!-- Dompet -->
+		<a href="/dashboard/wallet" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname === '/dashboard/wallet' ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname === '/dashboard/wallet' ? '2.5' : '2'} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+			<span class="text-[11px] leading-none font-medium">Dompet</span>
 		</a>
 
-		<a
-			href="/dashboard/settings"
-			class="flex h-12 w-[20%] flex-col items-center justify-center gap-1 rounded-xl transition-colors {$page.url.pathname.includes(
-				'/dashboard/settings'
-			)
-				? 'text-blue-600'
-				: 'text-surface-500 hover:text-surface-700'}"
-		>
-			<div
-				class={$page.url.pathname.includes('/dashboard/settings')
-					? 'rounded-lg bg-blue-100 p-1'
-					: 'p-1'}
-			>
-				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-					><path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width={$page.url.pathname.includes('/dashboard/settings') ? '2.5' : '2'}
-						d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-					></path></svg
-				>
-			</div>
-			<span class="text-[10px] leading-none font-medium">Akun</span>
+		<!-- Akun -->
+		<a href="/dashboard/settings" class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors {$page.url.pathname.includes('/dashboard/settings') ? 'text-blue-600' : 'text-surface-500 hover:text-surface-700'}">
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={$page.url.pathname.includes('/dashboard/settings') ? '2.5' : '2'} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+			<span class="text-[11px] leading-none font-medium">Akun</span>
 		</a>
 	</nav>
 </div>

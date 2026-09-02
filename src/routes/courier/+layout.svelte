@@ -216,28 +216,24 @@
 		</main>
 
 		<!-- Mobile Bottom Navigation -->
-		<nav
-			class="fixed inset-x-0 bottom-0 z-40 flex items-center justify-around border-t border-surface-200 bg-white px-2 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] md:hidden"
-		>
+		<nav class="fixed inset-x-0 bottom-0 z-50 flex items-center justify-around border-t border-surface-200 bg-white px-2 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] md:hidden">
 			{#each navItems as item}
 				<a
 					href={item.path}
-					class="flex h-12 w-16 flex-col items-center justify-center gap-1 rounded-xl transition-colors
+					class="flex w-16 flex-col items-center justify-center gap-1.5 transition-colors
             {$page.url.pathname === item.path
 						? 'text-blue-600'
 						: 'text-surface-500 hover:text-surface-700'}"
 				>
-					<div class={$page.url.pathname === item.path ? 'rounded-lg bg-blue-100 p-1.5' : 'p-1.5'}>
-						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width={$page.url.pathname === item.path ? '2.5' : '2'}
-								d={item.icon}
-							></path>
-						</svg>
-					</div>
-					<span class="text-[10px] leading-none font-medium">{item.name}</span>
+					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width={$page.url.pathname === item.path ? '2.5' : '2'}
+							d={item.icon}
+						></path>
+					</svg>
+					<span class="text-[11px] leading-none font-medium">{item.name}</span>
 				</a>
 			{/each}
 		</nav>
